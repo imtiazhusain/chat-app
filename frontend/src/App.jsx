@@ -1,7 +1,7 @@
-import Login from "./pages/login/Login";
+import Login from "./pages/login/Login.page";
 import { Route, Routes } from "react-router-dom";
-import Signup from "./pages/signup/Signup";
-import Chat from "./pages/chat/Chat";
+import Signup from "./pages/signup/Signup.page";
+import Chat from "./pages/chat/Chat.page";
 
 function App() {
   return (

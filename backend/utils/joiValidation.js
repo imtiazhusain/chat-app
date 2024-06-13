@@ -8,6 +8,15 @@ class JoiValidation {
     return schema.validate(body);
   }
 
+  static sendMessageValidation(body) {
+    const schema = Joi.object({
+      message: Joi.string().required(),
+      receiver_id: Joi.string().required(),
+    });
+
+    return schema.validate(body);
+  }
+
   static createMovieRatingValidation(body) {
     const schema = Joi.object({
       name: Joi.string().required().label("Movie Name"),

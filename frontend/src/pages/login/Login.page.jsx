@@ -3,7 +3,10 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Snackbar from "../../components/Snackbar";
 import axios from "../../config/axios";
+import { useGlobalState } from "../../context/globalStateProvider";
 const Login = () => {
+  const { state, dispatch } = useGlobalState();
+
   const [inputs, setInputs] = useState({});
   const [loading, setLoading] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -14,10 +17,8 @@ const Login = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  console.log(inputs);
   // if user come form signup form show msg to login
   useEffect(() => {
-    console.log("navigated from signup page");
     if (location.state) {
       setOpenSnackbar(true);
 
@@ -30,7 +31,6 @@ const Login = () => {
     const name = event.target.name;
     const value = event.target.value;
     setInputs((values) => ({ ...values, [name]: value }));
-    console.log(inputs);
   };
 
   function validateInputs() {
@@ -56,20 +56,18 @@ const Login = () => {
 
     // for input validation
     const shouldReturn = validateInputs();
-    console.log(shouldReturn);
-    console.log(isErrors);
+
     if (shouldReturn) {
       return;
     }
 
-    console.log(inputs);
     try {
       const response = await axios.post("/user/login", inputs);
       // Handle the response data here
-      console.log(response.data);
 
       localStorage.setItem("userInfo", JSON.stringify(response.data.data));
 
+      dispatch({ type: "SET_USER", payload: response.data.data });
       navigate("/chat-page");
     } catch (error) {
       console.log(error);

@@ -14,10 +14,8 @@ const Signup = () => {
   const navigate = useNavigate();
 
   const handleChange = (event) => {
-    console.log(event);
     const name = event.target.name;
     if (name == "profile_pic") {
-      console.log("this block");
       setInputs((values) => ({ ...values, [name]: event.target.files[0] }));
       // setprofile_pics(event.target.files[0])
     } else {
@@ -72,7 +70,6 @@ const Signup = () => {
     }
 
     if (!inputs.profile_pic.name) {
-      console.log(inputs.profile_pic);
       newErrors.profile_pic = "Please upload profile picture";
     }
 
@@ -91,8 +88,6 @@ const Signup = () => {
 
     // for input validation
     const shouldReturn = validateInputs();
-    console.log(shouldReturn);
-    console.log(isErrors);
     if (shouldReturn) {
       //  setOpenSnackbar(true);
       //  setMessage(
@@ -109,11 +104,9 @@ const Signup = () => {
     formData.append("password", inputs.password);
     formData.append("profile_pic", inputs.profile_pic);
 
-    console.log(inputs);
     try {
       const response = await axios.post("/user/register_user", formData);
       // Handle the response data here
-      console.log(response.data);
 
       navigate("/login", {
         state: {
@@ -121,7 +114,6 @@ const Signup = () => {
         },
       });
     } catch (error) {
-      console.log(error);
       setOpenSnackbar(true);
       setMessage(
         error.response.data.message

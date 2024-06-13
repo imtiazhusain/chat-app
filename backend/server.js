@@ -7,6 +7,8 @@ import connectDB from "./database/connectDB.js";
 import errorHandler from "./middlewares/errors/errorHandler.js";
 import cors from "cors";
 import userRoutes from "./routes/user.routes.js";
+import chatRoutes from "./routes/chat.routes.js";
+import messageRoutes from "./routes/message.routes.js";
 import path from "path";
 app.use(express.json());
 app.use(morgan("tiny"));
@@ -32,10 +34,11 @@ app.use(cors());
 
 // Use the function with import.meta.url to get the current directory
 const __dirname = getDirname(import.meta.url, path);
-console.log(__dirname);
-// console.log(express.static(__dirname));
+
 app.use("/public", express.static(__dirname + "/public"));
 app.use("/api/user", userRoutes);
+app.use("/api/chat", chatRoutes);
+app.use("/api/message", messageRoutes);
 app.use(errorHandler);
 app.use((req, res) => {
   res.status(404).json({ STATUS: "ERROR", MESSAGE: "Page not Found" });
