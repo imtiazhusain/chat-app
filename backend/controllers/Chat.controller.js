@@ -1,5 +1,5 @@
 import userModel from "../models/User.model.js";
-import chatModel from "../models/Chat.js";
+import chatModel from "../models/Chat.model.js";
 import messageModel from "../models/Message.js";
 import CustomErrorHandler from "../middlewares/errors/customErrorHandler.js";
 
@@ -7,7 +7,8 @@ import joiValidation from "../utils/joiValidation.js";
 import generateJwtTokens from "../utils/generateJwtTokens.js";
 import mongoose from "mongoose";
 class Chat {
-  static createOrAccessChat = async (req, res, next) => {
+  static createNewChat = async (req, res, next) => {
+    console.log("api called");
     console.log(req.params);
     const { receiver_id } = req.params;
 
@@ -26,35 +27,17 @@ class Chat {
     }
 
     try {
-      let chat = await chatModel
-        .find({
-          $and: [
-            { participants: { $elemMatch: { $eq: req.user._id } } },
-            { participants: { $elemMatch: { $eq: receiver_id } } },
-          ],
-        })
-        .populate("participants", "-password")
-        .populate({
-          path: "latestMessage",
-          populate: {
-            path: "sender",
-            model: "User",
-            select: "name email profile_pic",
-          },
-        })
-        .populate("messages", "-password");
+      let chat = await chatModel.find({
+        $and: [
+          { participants: { $elemMatch: { $eq: req.user._id } } },
+          { participants: { $elemMatch: { $eq: receiver_id } } },
+        ],
+      });
 
       if (chat.length > 0) {
-        let selectedChat = chat[0];
-
-        selectedChat?.participants.map((user) => {
-          user.profile_pic = `${
-            process.env.SERVER_URL ? process.env.SERVER_URL : ""
-          }/public/uploads/${user.profile_pic}`;
-        });
-        return res.status(200).json({
-          status: "success",
-          chat: selectedChat,
+        return res.status(403).json({
+          status: "error",
+          message: "Chat Already exists",
         });
       } else {
         console.log("new chat is going to create");
@@ -67,8 +50,21 @@ class Chat {
         console.log(result);
         let selectedChat = await chatModel
           .findOne({ _id: result._id })
-          .populate("participants", "-password")
-          .populate("messages", "-password");
+          // .populate("participants", "-password")
+          .populate({
+            path: "participants",
+            match: { _id: { $ne: req.user._id } }, // Exclude specific participants
+            select: "-password", // Exclude password field
+          })
+          .populate("messages")
+          .populate({
+            path: "latestMessage",
+            populate: {
+              path: "sender",
+              model: "User",
+              select: "name email profile_pic",
+            },
+          });
 
         selectedChat?.participants.map((user) => {
           user.profile_pic = `${
@@ -76,9 +72,14 @@ class Chat {
           }/public/uploads/${user.profile_pic}`;
         });
 
-        return res.status(200).json({
+        let processedChat = {
+          latestMessage: selectedChat.latestMessage,
+          user: selectedChat.participants[0],
+          chat_id: selectedChat._id,
+        };
+        return res.status(201).json({
           status: "success",
-          chat: selectedChat,
+          chat: processedChat,
         });
       }
     } catch (error) {

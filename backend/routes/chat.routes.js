@@ -4,10 +4,10 @@ const router = express.Router();
 import authMiddleware from "../middlewares/auth.js";
 import ChatController from "../controllers/Chat.controller.js";
 // chat
-router.get(
-  "/create_or_access_chat/:receiver_id",
+router.post(
+  "/create_new_chat/:receiver_id",
   authMiddleware,
-  ChatController.createOrAccessChat
+  ChatController.createNewChat
 );
 router.get("/get_all_chats", authMiddleware, ChatController.fetchChats);
 router.get("/get_chat/:chat_id", authMiddleware, ChatController.fetchChat);

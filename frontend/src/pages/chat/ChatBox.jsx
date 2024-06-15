@@ -31,6 +31,7 @@ const ChatBoxFooter = ({ addNewMessage }) => {
         placeholder="Search..."
         value={message}
         onChange={handleChange}
+        autoFocus
       />
       <div
         className=" text-slate-900 cursor-pointer"

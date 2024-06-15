@@ -5,12 +5,16 @@ import { IoCloseOutline } from "react-icons/io5";
 import axios from "../../config/axios";
 import { useGlobalState } from "../../context/globalStateProvider";
 import { Avatar } from "@mui/material";
-import { GoPencil } from "react-icons/go";
+import Snackbar from "../../components/Snackbar";
 
-const AllUsers = ({ data }) => {
+const AllUsers = ({ data, handleCreateNewChat }) => {
   console.log(data);
-  const handleUserClick = () => {
-    console.log("btn clicked");
+  const [loading, setLoading] = useState(false);
+  const handleAddUserClick = async () => {
+    setLoading(true);
+    const result = await handleCreateNewChat(data?._id);
+    console.log(result);
+    setLoading(false);
   };
   return (
     <div>
@@ -30,16 +34,16 @@ const AllUsers = ({ data }) => {
 
         <button
           className="ml-auto bg-green-200 hover:bg-green-300 rounded-full py-2 px-4  text-green-700 text-sm"
-          onClick={handleUserClick}
+          onClick={handleAddUserClick}
         >
-          Add User
+          {loading ? "Loading..." : "Start Chat"}
         </button>
       </div>
       <hr className=" bg-slate-700 border-t border-gray-300 my-1" />
     </div>
   );
 };
-const NewChatModel = ({ setOpenNewChatModel }) => {
+const NewChatModel = ({ setOpenNewChatModel, handleCreateNewChat }) => {
   const [loading, setLoading] = useState(false);
   const { state, dispatch } = useGlobalState();
   const [users, setUsers] = useState([]);
@@ -47,7 +51,6 @@ const NewChatModel = ({ setOpenNewChatModel }) => {
   const [filteredUsers, setFilteredUsers] = useState(users);
 
   const { user } = state;
-  useEffect(() => {}, []);
 
   useEffect(() => {
     const fetchAllUsers = async () => {
@@ -114,10 +117,21 @@ const NewChatModel = ({ setOpenNewChatModel }) => {
               <FaSearch />
             </div>
           </div>
-          <div className="mt-2 overflow-y-auto h-80">
-            {loading
-              ? "Fetching Users..."
-              : filteredUsers.map((user) => <AllUsers data={user} />)}
+          <div className="mt-3 overflow-y-auto h-80">
+            {loading ? (
+              "Fetching Users..."
+            ) : filteredUsers.length > 0 ? (
+              filteredUsers.map((user) => (
+                <AllUsers
+                  data={user}
+                  handleCreateNewChat={handleCreateNewChat}
+                />
+              ))
+            ) : (
+              <div className="mt-3">
+                <h3 className="text-center"> No Users Found</h3>
+              </div>
+            )}
           </div>
         </div>
       </Dialog>

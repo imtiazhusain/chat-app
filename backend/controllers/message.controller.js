@@ -1,4 +1,4 @@
-import chatModel from "../models/Chat.js";
+import chatModel from "../models/Chat.model.js";
 import messageModel from "../models/Message.js";
 import CustomErrorHandler from "../middlewares/errors/customErrorHandler.js";
 

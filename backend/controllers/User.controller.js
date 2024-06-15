@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 
 import joiValidation from "../utils/joiValidation.js";
 import generateJwtTokens from "../utils/generateJwtTokens.js";
+import chatModel from "../models/Chat.model.js";
 class User {
   static registerUser = async (req, res, next) => {
     try {
@@ -158,8 +159,33 @@ class User {
 
   static getAllUsers = async (req, res, next) => {
     try {
+      let chats = await chatModel.find({
+        participants: { $elemMatch: { $eq: req.user._id } },
+      });
+
+      console.log(chats);
+
+      // Extract all participant IDs and remove duplicates
+      // Step 1: flatMap combines all participant arrays into one array: [1, 2, 3, 3, 4, 5, 1, 6]
+      // Step 2: new Set([1, 2, 3, 3, 4, 5, 1, 6]) reduces it to unique values: Set(1, 2, 3, 4, 5, 6)
+      // Step 3: Array.from converts the Set back to an array: [1, 2, 3, 4, 5, 6]
+
+      // .toString Convert each ObjectId to a string to enable correct duplicate removal becuase if you don't do that it will consider new objectid and make them all unique so you need to convert into string
+      const uniqueIds = Array.from(
+        new Set(
+          chats.flatMap((obj) => obj.participants.map((id) => id.toString()))
+        )
+      );
+
+      console.log(uniqueIds);
+      // ignore single user
+      // const users = await userModel
+      //   .find({ _id: { $ne: req.user._id } })
+      //   .select("-password");
+
+      // ignore multiple users by giving array of id's
       const users = await userModel
-        .find({ _id: { $ne: req.user._id } })
+        .find({ _id: { $nin: uniqueIds } })
         .select("-password");
 
       users.map((user) => {
@@ -168,7 +194,6 @@ class User {
         }/public/uploads/${user.profile_pic}`;
       });
 
-      console.log(users);
       res.status(200).json({
         status: "success",
         data: users,
