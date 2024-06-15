@@ -186,7 +186,7 @@ const ChatBox = () => {
           "Loading Chats..."
         ) : (
           <>
-            <div className="h-[370px] overflow-y-scroll">
+            <div className="h-[370px] overflow-y-auto">
               <ChatSection messages={messages} />
               <div ref={chatEndRef} />
             </div>

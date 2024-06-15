@@ -122,7 +122,7 @@ const Login = () => {
               )}
             </div>
             <button className="w-full bg-slate-900  py-2.5 text-white tracking-wider hover:bg-slate-950 transition-colors duration-300 font-semibold rounded-lg mt-2">
-              Login
+              {loading ? "Loading..." : "Login"}
             </button>
             <div>
               <h3 className="text-gray-500">

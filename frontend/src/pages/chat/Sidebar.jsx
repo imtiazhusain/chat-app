@@ -6,6 +6,9 @@ import { FaSearch } from "react-icons/fa"; // Import the search icon
 import Chats from "./Chats";
 import axios from "../../config/axios";
 import { Promise } from "mongoose";
+import Dialog from "../../components/Dialog";
+import { IoCloseOutline } from "react-icons/io5";
+import NewChatModel from "./NewChatModel";
 const Sidebar = () => {
   const { state, dispatch } = useGlobalState();
 
@@ -13,6 +16,8 @@ const Sidebar = () => {
 
   const [userChats, setUserChats] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [openNewChatModel, setOpenNewChatModel] = useState(false);
+  const [filteredUsers, setFilteredUsers] = useState(userChats);
 
   useEffect(() => {
     const fetchChats = async () => {
@@ -35,14 +40,22 @@ const Sidebar = () => {
     fetchChats();
   }, [user?.access_token]);
 
+  console.log(userChats);
   return (
     <div className="">
+      {openNewChatModel && (
+        <NewChatModel setOpenNewChatModel={setOpenNewChatModel} />
+      )}
+
       <div className="flex items-center justify-between">
         <div className="flex gap-3 items-center">
           <Avatar alt={user.name} src={user.profile_pic} />
           <h3 className="text-slate-800 font-semibold tracking-wide">Kate</h3>
         </div>
-        <div className="flex justify-between bg-slate-900 hover:bg-slate-950 rounded-full p-3 shadow-md text-white items-center gap-2">
+        <div
+          className="flex justify-between bg-slate-900 hover:bg-slate-950 rounded-full p-3 shadow-md text-white items-center gap-2"
+          onClick={() => setOpenNewChatModel(true)}
+        >
           <GoPencil size={20} />
 
           <button className="">New Chat</button>

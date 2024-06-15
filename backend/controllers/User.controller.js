@@ -113,9 +113,8 @@ class User {
   };
 
   // SEARCH USER
-  static getAllUsers = (req, res, next) => {
+  static searchUsers = async (req, res, next) => {
     try {
-      console.log("ddddddddddddddddd");
       let userName = req.query.username;
 
       if (userName) {
@@ -145,9 +144,35 @@ class User {
       } else {
         res.status(422).json({
           status: "error",
-          message: "plaese provide username",
+          message: "Please provide username",
         });
       }
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        status: "error",
+        message: "something went wrong while searching user",
+      });
+    }
+  };
+
+  static getAllUsers = async (req, res, next) => {
+    try {
+      const users = await userModel
+        .find({ _id: { $ne: req.user._id } })
+        .select("-password");
+
+      users.map((user) => {
+        user.profile_pic = `${
+          process.env.SERVER_URL ? process.env.SERVER_URL : ""
+        }/public/uploads/${user.profile_pic}`;
+      });
+
+      console.log(users);
+      res.status(200).json({
+        status: "success",
+        data: users,
+      });
     } catch (error) {
       console.log(error);
       res.status(500).json({
