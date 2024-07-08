@@ -2,11 +2,20 @@ import { Avatar } from "@mui/material";
 import React from "react";
 import { useGlobalState } from "../../context/globalStateProvider";
 import convertIntoTime from "../../utils/convertIntoTime";
+import { useSocketContext } from "../../context/SocketContext";
+import OnlineDot from "../../components/onlineDot";
 
 const Chat = ({ data }) => {
   const { state, dispatch } = useGlobalState();
 
   const { selectedChat } = state;
+  const { onlineUsers } = useSocketContext();
+  console.log("online users.....");
+  console.log(onlineUsers);
+
+  const isOnline = onlineUsers.includes(data.user._id);
+  console.log(data.user._id);
+  console.log(isOnline);
   console.log(data);
   const setSelectedChat = () => {
     dispatch({ type: "SET_SELECTED_CHAT", payload: data });
@@ -18,7 +27,18 @@ const Chat = ({ data }) => {
           selectedChat?.user?._id == data?.user?._id && "bg-gray-300 rounded-md"
         }   `}
       >
-        <Avatar alt="user image" src={data?.user?.profile_pic} />
+        {isOnline ? (
+          <OnlineDot
+            overlap="circular"
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            variant="dot"
+          >
+            <Avatar alt="user image" src={data?.user?.profile_pic} />
+          </OnlineDot>
+        ) : (
+          <Avatar alt="user image" src={data?.user?.profile_pic} />
+        )}
+
         <div className="flex flex-col gap-0  w-full">
           <div className="flex justify-between items-center w-full ">
             <h3 className="text-slate-800 font-medium tracking-wide">

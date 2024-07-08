@@ -1,5 +1,4 @@
 import express from "express";
-const app = express();
 import morgan from "morgan";
 import { PORT } from "./config/index.js";
 import getDirname from "./utils/getDirName.js";
@@ -10,6 +9,7 @@ import userRoutes from "./routes/user.routes.js";
 import chatRoutes from "./routes/chat.routes.js";
 import messageRoutes from "./routes/message.routes.js";
 import path from "path";
+import { app, io, server } from "./socket/socket.js";
 app.use(express.json());
 app.use(morgan("tiny"));
 app.disable("x-powered-by");
@@ -43,7 +43,6 @@ app.use(errorHandler);
 app.use((req, res) => {
   res.status(404).json({ STATUS: "ERROR", MESSAGE: "Page not Found" });
 });
-
-const server = app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`app is listening at http://localhost:${PORT}`);
 });

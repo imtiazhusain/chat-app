@@ -8,6 +8,8 @@ import axios from "../../config/axios";
 import NewChatModel from "./NewChatModel";
 import extractSenderData from "../../utils/extractSenderData";
 import Snackbar from "../../components/Snackbar";
+import UserProfile from "./UserProfile";
+import OnlineDot from "../../components/onlineDot";
 
 const Sidebar = () => {
   const { state, dispatch } = useGlobalState();
@@ -24,6 +26,7 @@ const Sidebar = () => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [message, setMessage] = useState("");
   const [type, setType] = useState("");
+  const [openProfileModel, setOpenProfileModel] = useState(false);
 
   useEffect(() => {
     const fetchChats = async () => {
@@ -107,11 +110,33 @@ const Sidebar = () => {
           handleCreateNewChat={handleCreateNewChat}
         />
       )}
+      {openProfileModel && (
+        <UserProfile
+          setOpenProfileModel={setOpenProfileModel}
+          userData={user}
+        />
+      )}
 
       <div className="flex items-center justify-between">
         <div className="flex gap-3 items-center">
-          <Avatar alt={user.name} src={user.profile_pic} />
-          <h3 className="text-slate-800 font-semibold tracking-wide">Kate</h3>
+          <OnlineDot
+            overlap="circular"
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            variant="dot"
+          >
+            <Avatar
+              alt={user.name}
+              src={user.profile_pic}
+              onClick={() => setOpenProfileModel(true)}
+              className="cursor-pointer"
+            />
+          </OnlineDot>
+          <h3
+            className="text-slate-800 font-semibold tracking-wide cursor-pointer"
+            onClick={() => setOpenProfileModel(true)}
+          >
+            {user.name}
+          </h3>
         </div>
         <div
           className="flex justify-between bg-slate-900 hover:bg-slate-950 rounded-full p-3 shadow-md text-white items-center gap-2"

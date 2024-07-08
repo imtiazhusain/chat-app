@@ -4,6 +4,7 @@ import CustomErrorHandler from "../middlewares/errors/customErrorHandler.js";
 
 import JoiValidation from "../utils/joiValidation.js";
 import mongoose from "mongoose";
+import { getReceiverSocketId, io } from "../socket/socket.js";
 class Message {
   static sendMessage = async (req, res, next) => {
     try {
@@ -40,17 +41,24 @@ class Message {
         message: message,
         receiver: receiver_id,
       });
-      let result = await createMessage.save();
-      console.log(result);
+      let newMessage = await createMessage.save();
+      console.log(newMessage);
 
-      chat.latestMessage = result._id;
-      chat.messages.push(result._id);
+      chat.latestMessage = newMessage._id;
+      chat.messages.push(newMessage._id);
       console.log(chat);
       await chat.save();
 
+      // SOCKET IO FUNCTIONALITY WILL GO HERE
+      const receiverSocketId = getReceiverSocketId(receiver_id);
+      if (receiverSocketId) {
+        // io.to(<socket_id>).emit () used to send events to specific client
+        io.to(receiverSocketId).emit("newMessage", newMessage);
+      }
+
       return res
         .status(201)
-        .json({ status: "success", data: result, message: "message sent" });
+        .json({ status: "success", data: newMessage, message: "message sent" });
     } catch (error) {
       console.log(error);
 
