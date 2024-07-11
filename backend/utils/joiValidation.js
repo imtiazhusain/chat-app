@@ -61,6 +61,16 @@ class JoiValidation {
 
     return schema.validate(body);
   }
+
+  static editUser(body) {
+    const schema = Joi.object({
+      name: Joi.string().min(2).max(30).required().label("Name"),
+      email: Joi.string().email().required().label("Email"),
+      user_id: Joi.string().required().label("User ID"),
+    });
+
+    return schema.validate(body);
+  }
 }
 
 export default JoiValidation;

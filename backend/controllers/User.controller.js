@@ -6,17 +6,14 @@ import bcrypt from "bcrypt";
 import joiValidation from "../utils/joiValidation.js";
 import generateJwtTokens from "../utils/generateJwtTokens.js";
 import chatModel from "../models/Chat.model.js";
+import mongoose from "mongoose";
 class User {
   static registerUser = async (req, res, next) => {
     try {
-      console.log("hello");
-      console.log(req.body);
-
       // here i also coment 2 lines bcz i am not using multer here
       req.body.profile_pic = req?.file?.filename;
       const profile_pic = req.body.profile_pic;
 
-      console.log(req.body);
       const { name, email, password } = req.body;
       // validation
 
@@ -38,19 +35,12 @@ class User {
       // hashing password
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      console.log(hashedPassword);
-
-      // console.log(req.body)
-
       const registerUser = new userModel({
         name,
         email,
         profile_pic,
         password: hashedPassword,
       });
-
-      console.log("register user is");
-      console.log(registerUser);
 
       const result = await registerUser.save();
 
@@ -66,7 +56,6 @@ class User {
 
   static login = async (req, res, next) => {
     try {
-      console.log(req.body);
       // validation
       const { error } = joiValidation.logInBodyValidation(req.body);
 
@@ -163,8 +152,6 @@ class User {
         participants: { $elemMatch: { $eq: req.user._id } },
       });
 
-      console.log(chats);
-
       // Extract all participant IDs and remove duplicates
       // Step 1: flatMap combines all participant arrays into one array: [1, 2, 3, 3, 4, 5, 1, 6]
       // Step 2: new Set([1, 2, 3, 3, 4, 5, 1, 6]) reduces it to unique values: Set(1, 2, 3, 4, 5, 6)
@@ -177,7 +164,6 @@ class User {
         )
       );
 
-      console.log(uniqueIds);
       // ignore single user
       // const users = await userModel
       //   .find({ _id: { $ne: req.user._id } })
@@ -208,7 +194,6 @@ class User {
   };
 
   static logout = async (req, res, next) => {
-    console.log(req.body);
     // validation
 
     // const { error } = joiValidation.refreshTokenValidation(req.body);
@@ -224,6 +209,83 @@ class User {
       return next(new Error("somthing went wrong in database"));
     }
     res.status(200).json({ status: "success", message: "successfully logout" });
+  };
+
+  static editUser = async (req, res, next) => {
+    try {
+      // here i also coment 2 lines bcz i am not using multer here
+      // req.body.profile_pic = req?.file?.filename;
+      const profile_pic = req?.file?.filename;
+
+      const { name, email, user_id } = req.body;
+      console.log(req.body);
+
+      if (req?.body?.profile_pic) {
+        delete req.body.profile_pic;
+      }
+      console.log(profile_pic);
+      console.log(req.body);
+      // validation
+      const isValidID = mongoose.Types.ObjectId.isValid(user_id);
+
+      if (!isValidID) {
+        return next(CustomErrorHandler.invalidId("Invalid user ID"));
+      }
+      const { error } = joiValidation.editUser(req.body);
+
+      if (error) {
+        console.log(error.message);
+        return next(error);
+      }
+
+      const exist = await userModel.exists({
+        email: email,
+        _id: { $ne: user_id },
+      });
+
+      if (exist) {
+        return next(
+          CustomErrorHandler.alreadyExist("This email is already taken")
+        );
+      }
+
+      let userUpdatedData = {
+        name: name,
+        email: email,
+        profile_pic: profile_pic ? profile_pic : null,
+      };
+
+      if (!userUpdatedData?.profile_pic) {
+        console.log("profile not found");
+        delete userUpdatedData.profile_pic;
+      }
+
+      console.log(userUpdatedData);
+      const updatedUser = await userModel.findByIdAndUpdate(
+        user_id,
+        userUpdatedData,
+        { new: true } // Return the updated document
+      );
+
+      updatedUser.profile_pic = `${
+        process.env.SERVER_URL ? process.env.SERVER_URL : ""
+      }/public/uploads/${updatedUser.profile_pic}`;
+
+      let userData = {
+        email: updatedUser.email,
+        name: updatedUser.name,
+        profile_pic: updatedUser.profile_pic,
+      };
+
+      return res.status(201).json({
+        status: "success",
+        message: "User updated successfully",
+        data: userData,
+      });
+    } catch (error) {
+      console.log(error);
+      return next(error);
+    }
   };
 }
 

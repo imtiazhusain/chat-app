@@ -42,11 +42,9 @@ class Message {
         receiver: receiver_id,
       });
       let newMessage = await createMessage.save();
-      console.log(newMessage);
 
       chat.latestMessage = newMessage._id;
       chat.messages.push(newMessage._id);
-      console.log(chat);
       await chat.save();
 
       // SOCKET IO FUNCTIONALITY WILL GO HERE

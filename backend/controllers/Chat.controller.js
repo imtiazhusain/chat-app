@@ -8,8 +8,6 @@ import generateJwtTokens from "../utils/generateJwtTokens.js";
 import mongoose from "mongoose";
 class Chat {
   static createNewChat = async (req, res, next) => {
-    console.log("api called");
-    console.log(req.params);
     const { receiver_id } = req.params;
 
     if (!receiver_id) {
@@ -21,7 +19,6 @@ class Chat {
 
     const isValidID = mongoose.Types.ObjectId.isValid(receiver_id);
 
-    console.log(isValidID);
     if (!isValidID) {
       return next(CustomErrorHandler.invalidId("Invalid receiver ID"));
     }
@@ -40,14 +37,12 @@ class Chat {
           message: "Chat Already exists",
         });
       } else {
-        console.log("new chat is going to create");
         const registerNewChat = new chatModel({
           participants: [req.user._id, receiver_id],
         });
 
         const result = await registerNewChat.save();
 
-        console.log(result);
         let selectedChat = await chatModel
           .findOne({ _id: result._id })
           // .populate("participants", "-password")
@@ -106,7 +101,6 @@ class Chat {
 
         .sort({ updatedAt: -1 });
 
-      console.log(chats);
       if (chats.length > 0) {
         chats.map((chat) => {
           chat?.participants.map((user) => {
