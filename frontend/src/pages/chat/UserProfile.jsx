@@ -43,7 +43,7 @@ const UserProfile = ({ setOpenProfileModel, userData }) => {
               />
             )}
             <div className="mt-5">
-              <h3 className="text-slate-800  tracking-wide text-center font-semibold">
+              <h3 className="text-slate-800  tracking-wide text-center font-semibold text-2xl">
                 {userData.name}
               </h3>
               <h3 className="text-gray-600  tracking-wide text-center">

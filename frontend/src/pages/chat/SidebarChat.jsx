@@ -10,20 +10,16 @@ const Chat = ({ data }) => {
 
   const { selectedChat } = state;
   const { onlineUsers } = useSocketContext();
-  console.log("online users.....");
-  console.log(onlineUsers);
 
   const isOnline = onlineUsers.includes(data.user._id);
-  console.log(data.user._id);
-  console.log(isOnline);
-  console.log(data);
+
   const setSelectedChat = () => {
     dispatch({ type: "SET_SELECTED_CHAT", payload: data });
   };
   return (
     <div className="cursor-pointer" onClick={setSelectedChat}>
       <div
-        className={`flex gap-3 items-center my-4  px-2 py-1 ${
+        className={`flex gap-3 items-center my-3  px-2 py-1 ${
           selectedChat?.user?._id == data?.user?._id && "bg-gray-300 rounded-md"
         }   `}
       >
@@ -49,7 +45,9 @@ const Chat = ({ data }) => {
             </h3>
           </div>
           <h3 className="text-gray-500 text-xs">
-            {data?.latestMessage?.message}
+            {data?.latestMessage?.message.length >= 30
+              ? data?.latestMessage?.message.slice(0, 30) + "..."
+              : data?.latestMessage?.message}
           </h3>
         </div>
       </div>

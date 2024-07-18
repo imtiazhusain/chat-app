@@ -3,13 +3,15 @@ import React, { useEffect, useState } from "react";
 import { GoPencil } from "react-icons/go";
 import { useGlobalState } from "../../context/globalStateProvider";
 import { FaSearch } from "react-icons/fa"; // Import the search icon
-import Chat from "./Chat";
+import SidebarChat from "./SidebarChat";
 import axios from "../../config/axios";
 import NewChatModel from "./NewChatModel";
 import extractSenderData from "../../utils/extractSenderData";
 import Snackbar from "../../components/Snackbar";
 import UserProfile from "./UserProfile";
 import OnlineDot from "../../components/onlineDot";
+import SettingMenu from "./SettingMenu";
+import EditUserProfile from "./EditUserProfile";
 
 const Sidebar = () => {
   const { state, dispatch } = useGlobalState();
@@ -27,6 +29,7 @@ const Sidebar = () => {
   const [message, setMessage] = useState("");
   const [type, setType] = useState("");
   const [openProfileModel, setOpenProfileModel] = useState(false);
+  const [openEditProfileModel, setOpenEditProfileModel] = useState(false);
 
   useEffect(() => {
     const fetchChats = async () => {
@@ -98,10 +101,8 @@ const Sidebar = () => {
       );
       setType("error");
     }
-
-    // };
   };
-  console.log(filteredChats);
+
   return (
     <div className="">
       {openNewChatModel && (
@@ -117,20 +118,21 @@ const Sidebar = () => {
         />
       )}
 
+      {openEditProfileModel && (
+        <EditUserProfile
+          setOpenEditProfileModel={setOpenEditProfileModel}
+          userData={user}
+        />
+      )}
+
       <div className="flex items-center justify-between">
         <div className="flex gap-3 items-center">
-          <OnlineDot
-            overlap="circular"
-            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-            variant="dot"
-          >
-            <Avatar
-              alt={user.name}
-              src={user.profile_pic}
-              onClick={() => setOpenProfileModel(true)}
-              className="cursor-pointer"
-            />
-          </OnlineDot>
+          <Avatar
+            alt={user.name}
+            src={user.profile_pic}
+            onClick={() => setOpenProfileModel(true)}
+            className="cursor-pointer"
+          />
           <h3
             className="text-slate-800 font-semibold tracking-wide cursor-pointer"
             onClick={() => setOpenProfileModel(true)}
@@ -139,10 +141,10 @@ const Sidebar = () => {
           </h3>
         </div>
         <div
-          className="flex justify-between bg-slate-900 hover:bg-slate-950 rounded-full p-3 shadow-md text-white items-center gap-2"
+          className="flex justify-between bg-slate-900 hover:bg-slate-950 rounded-full px-3 py-2 shadow-md text-white items-center gap-2"
           onClick={() => setOpenNewChatModel(true)}
         >
-          <GoPencil size={20} />
+          {/* <GoPencil size={20} /> */}
 
           <button className="">New Chat</button>
         </div>
@@ -164,11 +166,20 @@ const Sidebar = () => {
       <hr className="  bg-slate-700 border-t border-gray-300 my-4" />
 
       {/* show chats */}
-      {loading
-        ? "Loading..."
-        : filteredChats.length > 0
-        ? filteredChats.map((chat) => <Chat data={chat} key={chat._id} />)
-        : "No Chat Found"}
+      <div className="h-[370px] overflow-y-auto">
+        {loading ? (
+          "Loading..."
+        ) : filteredChats.length > 0 ? (
+          <>
+            {filteredChats.map((chat) => (
+              <SidebarChat data={chat} key={chat._id} />
+            ))}
+          </>
+        ) : (
+          "No Chat Found"
+        )}
+      </div>
+      <SettingMenu setOpenEditProfileModel={setOpenEditProfileModel} />
 
       {openSnackbar && (
         <Snackbar

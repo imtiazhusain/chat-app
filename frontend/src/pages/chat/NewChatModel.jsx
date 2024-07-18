@@ -117,7 +117,7 @@ const NewChatModel = ({ setOpenNewChatModel, handleCreateNewChat }) => {
               <FaSearch />
             </div>
           </div>
-          <div className="mt-3 overflow-y-auto h-80">
+          <div className="mt-3 overflow-y-auto h-64">
             {loading ? (
               "Fetching Users..."
             ) : filteredUsers.length > 0 ? (

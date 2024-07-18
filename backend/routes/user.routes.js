@@ -11,5 +11,7 @@ router.post("/search_users", authMiddleware, User.searchUsers);
 router.get("/get_all_users", authMiddleware, User.getAllUsers);
 router.post("/register_user", [upload], User.registerUser);
 router.put("/edit_user", [upload], User.editUser);
+router.post("/verify_user", User.verifyUser);
+router.post("/send_otp", User.sendOTP);
 
 export default router;

@@ -89,14 +89,7 @@ const Signup = () => {
     // for input validation
     const shouldReturn = validateInputs();
     if (shouldReturn) {
-      //  setOpenSnackbar(true);
-      //  setMessage(
-      //    error.response.data.message
-      //      ? error.response.data.message
-      //      : "Something went wrong"
-      //  );
-      //  setType("error");
-      // return;
+      return;
     }
     const formData = new FormData();
     formData.append("name", inputs.name);
@@ -106,13 +99,18 @@ const Signup = () => {
 
     try {
       const response = await axios.post("/user/register_user", formData);
-      // Handle the response data here
 
-      navigate("/login", {
+      console.log(response);
+      navigate("/verify-user", {
         state: {
-          signupSuccess: true,
+          tempUser: response.data.user,
         },
       });
+      // navigate("/login", {
+      //   state: {
+      //     signupSuccess: true,
+      //   },
+      // });
     } catch (error) {
       setOpenSnackbar(true);
       setMessage(

@@ -1,19 +1,13 @@
-const nodemailer = require("nodemailer");
-const { EMAIL, PASS } = require("../config");
-const Joi = require("joi");
-const userModel = require("../models/User");
-const CustomErrorHandler = require("../middlewares/errors/customErrorHandler");
-const tokenModel = require("../models/VerificationToken");
-const { findByIdAndDelete } = require("../models/User");
-const mongoose = require('mongoose')
+import nodemailer from "nodemailer";
+import { EMAIL, PASS } from "../config/index.js";
 
 class EmailMethods {
   static sendEmail(to, subject, message) {
-    let templete;
-    if(subject == 'Email Verification'){
-        templete = emailTemplete(message)
-    }else{
-        templete = successEmailTemplete(message)
+    let template;
+    if (subject == "Email Verification") {
+      template = emailTemplate(message);
+    } else {
+      template = successEmailTemplate(message);
     }
 
     //  2) nodemailer
@@ -29,7 +23,7 @@ class EmailMethods {
       from: EMAIL, // jis key  trf say email jaye gi yhan uper wali email jo transporter may hvi use hogi yahn kuch b do kam ni kry ga
       to: to, // jis ko bhjni email valid dalna
       subject: subject, // email subject
-      html: templete, // email body
+      html: template, // email body
     };
 
     // 3) nodemailer
@@ -39,18 +33,12 @@ class EmailMethods {
       } else {
         console.log("Email Sent: " + info.response);
       }
-  
     });
-
   }
-
-
 }
 
-
-
-// email templetes
-function emailTemplete(OTP) {
+// email template
+function emailTemplate(OTP) {
   return `<!DOCTYPE html>
     <html lang="en">
     <head>
@@ -86,10 +74,8 @@ function emailTemplete(OTP) {
     </html>`;
 }
 
-
-
-function successEmailTemplete(message) {
-    return `<!DOCTYPE html>
+function successEmailTemplate(message) {
+  return `<!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -116,6 +102,6 @@ function successEmailTemplete(message) {
         </div>
     </body>
     </html>`;
-  }
+}
 
-module.exports = EmailMethods;
+export default EmailMethods;

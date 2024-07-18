@@ -19,10 +19,11 @@ const Login = () => {
 
   // if user come form signup form show msg to login
   useEffect(() => {
+    console.log(location.state);
     if (location.state) {
       setOpenSnackbar(true);
 
-      setMessage("Account Created Please Login");
+      setMessage("Account Verified Please Login");
       setType("success");
     }
   }, []);
@@ -68,7 +69,24 @@ const Login = () => {
       localStorage.setItem("userInfo", JSON.stringify(response.data.data));
 
       dispatch({ type: "SET_USER", payload: response.data.data });
-      navigate("/chat-page");
+
+      let userData = response.data?.data;
+      if (userData?.is_Verified) {
+        navigate("/chat-page");
+      } else {
+        const data = {
+          userId: userData?._id,
+          userEmail: userData?.email,
+        };
+
+        const response = await axios.post("/user/send_otp", data);
+
+        navigate("/verify-user", {
+          state: {
+            tempUser: userData,
+          },
+        });
+      }
     } catch (error) {
       console.log(error);
       setOpenSnackbar(true);

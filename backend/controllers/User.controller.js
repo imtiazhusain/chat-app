@@ -7,10 +7,12 @@ import joiValidation from "../utils/joiValidation.js";
 import generateJwtTokens from "../utils/generateJwtTokens.js";
 import chatModel from "../models/Chat.model.js";
 import mongoose from "mongoose";
+import HelperMethods from "../utils/helper.js";
+import VerificationTokenModel from "../models/VerificationToken.model.js";
+import EmailMethods from "../utils/email.js";
 class User {
   static registerUser = async (req, res, next) => {
     try {
-      // here i also coment 2 lines bcz i am not using multer here
       req.body.profile_pic = req?.file?.filename;
       const profile_pic = req.body.profile_pic;
 
@@ -42,11 +44,28 @@ class User {
         password: hashedPassword,
       });
 
+      console.log("register user is");
+      console.log(registerUser);
+      const OTP = HelperMethods.generateOTP();
+      const hashedOTP = await bcrypt.hash(OTP, 10);
+
+      const verificationToken = new VerificationTokenModel({
+        owner: registerUser._id,
+        OTP: hashedOTP,
+      });
+
+      const tokenResult = await verificationToken.save();
+
       const result = await registerUser.save();
 
+      EmailMethods.sendEmail(registerUser.email, "Email Verification", OTP);
       return res.status(201).json({
         status: "success",
-        message: "User created successfully",
+        message: "Please verify your email",
+        user: {
+          email: result.email,
+          _id: result._id,
+        },
       });
     } catch (error) {
       console.log(error);
@@ -89,6 +108,7 @@ class User {
         email: user.email,
         name: user.name,
         profile_pic: user.profile_pic,
+        is_verified: user.is_verified,
 
         access_token: accessToken,
       };
@@ -284,6 +304,161 @@ class User {
       });
     } catch (error) {
       console.log(error);
+      return next(error);
+    }
+  };
+
+  static verifyUser = async (req, res, next) => {
+    try {
+      const userID = req.body.userId;
+      const OTP = req.body.OTP;
+      console.log(userID);
+      // validation
+
+      const { error } = joiValidation.verifyEmailValidation(req.body);
+
+      if (error) {
+        console.log(error.message);
+        return next(error);
+      }
+
+      const isValidID = mongoose.Types.ObjectId.isValid(userID);
+      console.log(isValidID);
+      if (!isValidID) {
+        let error = {
+          message: "Invalid user ID",
+        };
+        return next(error);
+      }
+
+      const user = await userModel.findById(userID);
+      if (!user) {
+        return next(CustomErrorHandler.NotFound("User not Found"));
+      }
+
+      console.log(user);
+
+      if (user.is_verified) {
+        return res.status(403).json({
+          status: "error",
+          message: "This account is already verified",
+        });
+      }
+
+      const token = await VerificationTokenModel.findOne({ owner: user._id });
+      console.log(token);
+
+      if (!token) {
+        console.log("no token found");
+        return next(CustomErrorHandler.NotFound("No token found"));
+      }
+
+      const isMatched = await token.compareToken(OTP);
+
+      console.log(isMatched);
+
+      if (!isMatched) {
+        return res.status(422).json({
+          status: "error",
+          message: "Please provide a valid token!",
+        });
+      }
+      user.is_verified = true;
+
+      await VerificationTokenModel.findByIdAndDelete(token._id);
+      await user.save();
+
+      EmailMethods.sendEmail(
+        user.email,
+        "success message",
+        "Email verified successfully"
+      );
+
+      return res.status(200).json({
+        status: "success",
+        message: "Account verified",
+      });
+    } catch (error) {
+      console.log(error);
+
+      return next(error);
+    }
+  };
+
+  static sendOTP = async (req, res, next) => {
+    try {
+      console.log("in send otp");
+      console.log(req.query);
+      const userEmail = req.body.userEmail;
+      const userId = req.body.userId;
+
+      let obj = {
+        userEmail,
+        userId,
+      };
+
+      // validation
+      const { error } = joiValidation.sendOTPValidation(obj);
+
+      if (error) {
+        console.log(error.message);
+        return next(error);
+      }
+
+      const isValidID = mongoose.Types.ObjectId.isValid(userId);
+
+      if (!isValidID) {
+        let error = {
+          message: "Invalid user ID",
+        };
+        return next(error);
+      }
+
+      const user = await userModel.findOne({ email: userEmail });
+      if (!user) {
+        console.log("no user found");
+        return next(CustomErrorHandler.NotFound("No user found"));
+      }
+
+      if (user.is_verified) {
+        return res.status(403).json({
+          status: "error",
+          message: "This Account is already verified",
+        });
+      }
+
+      const OTP = HelperMethods.generateOTP();
+
+      const exist = await VerificationTokenModel.exists({ owner: userId });
+      if (exist) {
+        const result = await VerificationTokenModel.deleteOne({
+          owner: userId,
+        });
+        console.log("Account exits deleted");
+        console.log(result);
+      }
+
+      const hashedOTP = await bcrypt.hash(OTP, 10);
+
+      const verificationToken = new VerificationTokenModel({
+        owner: userId,
+        OTP: hashedOTP,
+      });
+
+      const tokenResult = await verificationToken.save();
+      EmailMethods.sendEmail(userEmail, "Email Verification", OTP);
+
+      return res.status(200).json({
+        status: "success",
+        message: "Please verify your email",
+        user: {
+          email: userEmail,
+          user_id: userId,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+
       return next(error);
     }
   };
