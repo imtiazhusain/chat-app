@@ -126,15 +126,15 @@ const Signup = () => {
 
   return (
     <div className=" grid place-items-center h-screen">
-      <div className="bg-white w-[512px]  p-4 rounded-md mt-3 ">
+      <div className="bg-white w-[80%]  md:w-[512px]  p-4 rounded-md mt-3 ">
         <div className="mb-4">
           <h1 className="font-bold text-base sm:text-2xl md:text-xl tracking-wide text-center">
             New Here ? Sign up now!
           </h1>
         </div>
         <form action="" className="" onSubmit={handleSubmit}>
-          <div className="grid  md:grid-cols-2 md:gap-4 lg:gap-6 md:gap-y-6 sm:gap-4 gap-2">
-            <div className="space-y-2">
+          <div className="grid  md:grid-cols-2 md:gap-4 lg:gap-6 md:gap-y-6 sm:gap-4 gap-2 bg-green-300 w-full">
+            <div className=" space-y-2">
               <label htmlFor="" className="text-xs sm:text-sm md:text-xl ">
                 Name
               </label>
@@ -144,7 +144,7 @@ const Signup = () => {
                 name="name"
                 value={inputs.name || ""}
                 onChange={handleChange}
-                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg  w-full p-2.5 outline-none placeholder:italic"
+                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg    w-full p-2.5  outline-none placeholder:italic"
               />
               {isErrors.name && (
                 <span className="text-red-600 text-sm">{isErrors.name}</span>

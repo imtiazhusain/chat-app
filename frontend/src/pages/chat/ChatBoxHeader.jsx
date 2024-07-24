@@ -1,16 +1,30 @@
 import { useState } from "react";
 import OnlineDot from "../../components/onlineDot";
-import { Avatar } from "@mui/material";
+import { Avatar, IconButton } from "@mui/material";
 import UserProfile from "./UserProfile";
 import { useSocketContext } from "../../context/SocketContext";
+import { IoMenu } from "react-icons/io5";
+import { useGlobalState } from "../../context/globalStateProvider";
+import { IoMdArrowBack, IoMdArrowRoundBack } from "react-icons/io";
 
 const ChatBoxHeader = ({ data, isTyping }) => {
   const [openProfileModel, setOpenProfileModel] = useState(false);
   const { onlineUsers } = useSocketContext();
   const isOnline = onlineUsers.includes(data.user._id);
+  const { dispatch, state } = useGlobalState();
+  const { isSidebarOpen } = state;
+  console.log(isSidebarOpen);
 
+  const handleSidebar = () => {
+    dispatch({ type: "SET_SELECTED_CHAT", payload: null });
+  };
   return (
-    <>
+    <div className="flex justify-between items-center">
+      <div className="md:hidden  rounded-full" onClick={handleSidebar}>
+        <IconButton aria-label="open-sidebar">
+          <IoMdArrowRoundBack color="#020617 " />
+        </IconButton>
+      </div>
       <div className="flex gap-3 items-center my-4">
         {isOnline ? (
           <OnlineDot
@@ -66,14 +80,14 @@ const ChatBoxHeader = ({ data, isTyping }) => {
           )}
         </div>
       </div>
-
+      <div></div>
       {openProfileModel && (
         <UserProfile
           setOpenProfileModel={setOpenProfileModel}
           userData={data?.user}
         />
       )}
-    </>
+    </div>
   );
 };
 

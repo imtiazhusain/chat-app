@@ -139,6 +139,21 @@ class Chat {
         });
       }
 
+      if (chat.messages.length > 0) {
+        chat.messages = chat.messages.map((message) => {
+          // Modify the attachedFile property of each message
+          // Set it to whatever you need to add
+          if (message?.attachedFile) {
+            if (message?.attachedFile?.startsWith("http")) return message;
+            message.attachedFile = `${
+              process.env.SERVER_URL ? process.env.SERVER_URL : ""
+            }/public/uploads/${message.attachedFile}`;
+          }
+
+          return message;
+        });
+      }
+
       return res.status(200).json({ status: "success", data: chat });
     } catch (error) {
       console.log(error);

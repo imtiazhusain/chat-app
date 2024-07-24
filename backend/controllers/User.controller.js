@@ -44,8 +44,6 @@ class User {
         password: hashedPassword,
       });
 
-      console.log("register user is");
-      console.log(registerUser);
       const OTP = HelperMethods.generateOTP();
       const hashedOTP = await bcrypt.hash(OTP, 10);
 

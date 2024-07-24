@@ -17,7 +17,7 @@ const Chat = ({ data }) => {
     dispatch({ type: "SET_SELECTED_CHAT", payload: data });
   };
   return (
-    <div className="cursor-pointer" onClick={setSelectedChat}>
+    <div className="cursor-pointer px-3" onClick={setSelectedChat}>
       <div
         className={`flex gap-3 items-center my-3  px-2 py-1 ${
           selectedChat?.user?._id == data?.user?._id && "bg-gray-300 rounded-md"
@@ -45,8 +45,8 @@ const Chat = ({ data }) => {
             </h3>
           </div>
           <h3 className="text-gray-500 text-xs">
-            {data?.latestMessage?.message.length >= 30
-              ? data?.latestMessage?.message.slice(0, 30) + "..."
+            {data?.latestMessage?.message.length >= 25
+              ? data?.latestMessage?.message.slice(0, 25) + "..."
               : data?.latestMessage?.message}
           </h3>
         </div>

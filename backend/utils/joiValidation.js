@@ -10,8 +10,19 @@ class JoiValidation {
 
   static sendMessageValidation(body) {
     const schema = Joi.object({
-      message: Joi.string().required(),
+      // message: Joi.string().optional(),
+
+      message: Joi.string()
+        .allow("")
+        .when("file", {
+          is: Joi.string().min(1), // Checks that 'file' is a non-empty string
+          then: Joi.optional(), // 'message' can be optional
+          otherwise: Joi.string().required().messages({
+            "string.empty": "Message cannot be empty if no file is provided",
+          }), // 'message' must not be empty if 'file' is not provided
+        }),
       receiver_id: Joi.string().required(),
+      file: Joi.string().optional(),
     });
 
     return schema.validate(body);

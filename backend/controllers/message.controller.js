@@ -8,7 +8,15 @@ import { getReceiverSocketId, io } from "../socket/socket.js";
 class Message {
   static sendMessage = async (req, res, next) => {
     try {
-      const { message, receiver_id } = req.body;
+      req.body.file = req?.file?.filename;
+      const { message, receiver_id, file } = req.body;
+
+      if (!file && message.length == 0) {
+        return res.status(403).json({
+          status: "error",
+          message: "Empty message is not allowed",
+        });
+      }
 
       // validation
       const { error } = JoiValidation.sendMessageValidation(req.body);
@@ -40,13 +48,19 @@ class Message {
         sender: req.user._id,
         message: message,
         receiver: receiver_id,
+
+        ...(file && { attachedFile: file }),
       });
       let newMessage = await createMessage.save();
 
       chat.latestMessage = newMessage._id;
       chat.messages.push(newMessage._id);
       await chat.save();
-
+      if (newMessage.attachedFile) {
+        newMessage.attachedFile = `${
+          process.env.SERVER_URL ? process.env.SERVER_URL : ""
+        }/public/uploads/${newMessage.attachedFile}`;
+      }
       // SOCKET IO FUNCTIONALITY WILL GO HERE
       const receiverSocketId = getReceiverSocketId(receiver_id);
       if (receiverSocketId) {
@@ -78,6 +92,15 @@ class Message {
         .find({ chat: chatId })
         .populate("sender", "name profilePic email")
         .populate("chat");
+
+      if (messages.length > 0) {
+        messages.map((message) => {
+          if (message?.attachedFile.startsWith("http")) return;
+          message.attachedFile = `${
+            process.env.SERVER_URL ? process.env.SERVER_URL : ""
+          }/public/uploads/${message.attachedFile}`;
+        });
+      }
 
       if (messages.length > 0) {
         res.status(200).json({

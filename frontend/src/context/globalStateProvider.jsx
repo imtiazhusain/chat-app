@@ -20,6 +20,9 @@ const globalReducer = (state, action) => {
     case "LOGOUT_USER":
       return { ...state, user: null };
 
+    case "SET_SIDEBAR":
+      return { ...state, isSidebarOpen: action.payload };
+
     case "SET_SELECTED_CHAT":
       return { ...state, selectedChat: action.payload };
     default:
@@ -33,6 +36,7 @@ export const GlobalStateProvider = ({ children }) => {
   const [state, dispatch] = useReducer(globalReducer, {
     user: userInfo ? userInfo : null,
     selectedChat: null,
+    isSidebarOpen: false,
   });
 
   // Value to be passed to context consumers
