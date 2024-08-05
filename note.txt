@@ -41,3 +41,7 @@ this code is for Protected routes
           <Route path="*" element={<PageNotFound />} /> */}
   </Route>
 </Routes>;
+
+
+--prefix is used for go to frontend folder and run command
+"build":"npm install && npm install --prefix frontend && npm run build --prefix frontend"
