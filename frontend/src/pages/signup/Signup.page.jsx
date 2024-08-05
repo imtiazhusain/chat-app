@@ -133,7 +133,7 @@ const Signup = () => {
           </h1>
         </div>
         <form action="" className="" onSubmit={handleSubmit}>
-          <div className="grid  md:grid-cols-2 md:gap-4 lg:gap-6 md:gap-y-6 sm:gap-4 gap-2 bg-green-300 w-full">
+          <div className="grid  md:grid-cols-2 md:gap-4 lg:gap-6 md:gap-y-6 sm:gap-4 gap-2  w-full">
             <div className=" space-y-2">
               <label htmlFor="" className="text-xs sm:text-sm md:text-xl ">
                 Name
@@ -155,7 +155,7 @@ const Signup = () => {
                 Email
               </label>
               <input
-                type="text"
+                type="email"
                 placeholder="name@company.com"
                 name="email"
                 value={inputs.email || ""}

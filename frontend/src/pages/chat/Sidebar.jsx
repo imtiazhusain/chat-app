@@ -540,7 +540,7 @@ const Sidebar = () => {
           ) : filteredChats.length > 0 ? (
             <>
               {filteredChats.map((chat) => (
-                <SidebarChat data={chat} key={chat._id} />
+                <SidebarChat data={chat} key={chat.chat_id} />
               ))}
             </>
           ) : (

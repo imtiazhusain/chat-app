@@ -1,2 +1,43 @@
 type:module in packge.json to use import statement
 getDirname: imports may __dirname kam ni kr rha tha express.static k leye chye tha tu ye function bnya jo windows or baki os k according dirname dey ga
+
+
+
+
+this code is for Protected routes
+
+  {/* Protected routes for authorized users */}
+        {/* <Route element={<ProtectedRoutes />}>
+          <Route path="chat-page" element={<Chat />} />
+          <Route index element={<Chat />} />
+        </Route> */}
+
+
+// older version 
+
+<Routes>
+  {/* unauthorized routes */}
+  <Route path="/">
+    {!user && (
+      <>
+        <Route path="login" element={<Login />} />
+        <Route path="signup" element={<Signup />} />
+        <Route index element={<Login />} />
+      </>
+    )}
+
+    {/* Authorized routes */}
+
+    <Route element={<ProtectedRoutes />}>
+      <Route path="chat-page" element={<Chat />} />
+      <Route path="verify-user" element={<VerifyUser />} />
+      <Route index element={<Chat />} />
+
+      <Route path="login" element={<Navigate to="/chat-page" />} />
+      <Route path="signup" element={<Navigate to="/chat-page" />} />
+    </Route>
+
+    {/* <Route path="profile" element={userData ? <Profile /> : <Login />} />
+          <Route path="*" element={<PageNotFound />} /> */}
+  </Route>
+</Routes>;
