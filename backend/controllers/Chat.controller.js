@@ -6,6 +6,7 @@ import CustomErrorHandler from "../middlewares/errors/customErrorHandler.js";
 import joiValidation from "../utils/joiValidation.js";
 import generateJwtTokens from "../utils/generateJwtTokens.js";
 import mongoose from "mongoose";
+import HelperMethods from "../utils/helper.js";
 class Chat {
   static createNewChat = async (req, res, next) => {
     const { receiver_id } = req.params;
@@ -85,6 +86,7 @@ class Chat {
 
   static fetchChats = async (req, res, next) => {
     try {
+      console.log(req.user._id);
       let chats = await chatModel
         .find({
           participants: { $elemMatch: { $eq: req.user._id } },
@@ -155,6 +157,48 @@ class Chat {
       }
 
       return res.status(200).json({ status: "success", data: chat });
+    } catch (error) {
+      console.log(error);
+
+      return next(error);
+    }
+  };
+
+  static deleteChat = async (req, res, next) => {
+    try {
+      const { chat_id } = req.params;
+
+      const isValidID = mongoose.Types.ObjectId.isValid(chat_id);
+
+      if (!isValidID) {
+        return next(CustomErrorHandler.invalidId("Invalid chat ID"));
+      }
+
+      let chat = await chatModel.findById(chat_id).populate("messages");
+      if (!chat) {
+        return res.status(404).json({
+          status: "error",
+          message: "Chat Not Found",
+        });
+      }
+
+      if (chat.messages.length > 0) {
+        let result = chat.messages.map((message) => {
+          if (message?.attachedFile) {
+            let fileName = message?.attachedFile;
+            HelperMethods.deleteFileIfExists(fileName);
+          }
+        });
+
+        await messageModel.deleteMany({
+          _id: { $in: chat.messages.map((message) => message._id) },
+        });
+      }
+
+      await chatModel.findByIdAndDelete(chat_id);
+      return res
+        .status(200)
+        .json({ status: "success", message: "Chat deleted successfully" });
     } catch (error) {
       console.log(error);
 

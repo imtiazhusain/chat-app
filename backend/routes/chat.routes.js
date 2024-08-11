@@ -11,6 +11,7 @@ router.post(
 );
 router.get("/get_all_chats", authMiddleware, ChatController.fetchChats);
 router.get("/get_chat/:chat_id", authMiddleware, ChatController.fetchChat);
+router.delete("/delete_chat/:chat_id", ChatController.deleteChat);
 // router.post(
 //   "/create_group_chat",
 //   authMiddleware,

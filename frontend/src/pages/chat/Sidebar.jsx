@@ -439,6 +439,8 @@ const Sidebar = () => {
     setFilteredChats(filtered);
   }, [searchQuery, userChats]);
 
+  console.log(filteredChats);
+
   const searchUsers = (e) => {
     SetSearchQuery(e.target.value);
   };
@@ -540,7 +542,11 @@ const Sidebar = () => {
           ) : filteredChats.length > 0 ? (
             <>
               {filteredChats.map((chat) => (
-                <SidebarChat data={chat} key={chat.chat_id} />
+                <SidebarChat
+                  data={chat}
+                  key={chat.chat_id}
+                  setUserChats={setUserChats}
+                />
               ))}
             </>
           ) : (
