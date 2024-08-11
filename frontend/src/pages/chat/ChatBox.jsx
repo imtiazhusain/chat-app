@@ -142,7 +142,7 @@ const ChatBox = () => {
 
       <div className="md:max-w-[550px] p-4 border border-gray-300 h-[88%]  rounded-md flex flex-col justify-between ">
         {loading ? (
-          "Loading Chats..."
+          <h2 className="text-center">Loading chats...</h2>
         ) : (
           <>
             <div className="h-[450px]  md:h-[370px] overflow-y-auto p-3">
@@ -150,7 +150,9 @@ const ChatBox = () => {
 
               <div ref={chatEndRef} />
             </div>
-            <ChatBoxFooter setMessages={setMessages} />
+            <div className="pb-3 md:pb-0">
+              <ChatBoxFooter setMessages={setMessages} />
+            </div>
           </>
         )}
       </div>

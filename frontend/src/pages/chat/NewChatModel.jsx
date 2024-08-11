@@ -28,12 +28,20 @@ const AllUsers = ({ data, handleCreateNewChat }) => {
             <h3 className="text-slate-800 font-medium tracking-wide">
               {data.name}
             </h3>
-            <h3 className="text-gray-500 text-xs">{data?.email}</h3>
+            <h3 className="text-gray-500 text-xs">
+              {/* {data?.email.length >= 12
+                ? data?.email.slice(0, 12) + "..."
+                : data?.email} */}
+
+              {data?.email.length >= 12
+                ? data?.email.slice(0, 5) + "..." + data?.email.slice(-7)
+                : data?.email}
+            </h3>
           </div>
         </div>
 
         <button
-          className="ml-auto bg-green-200 hover:bg-green-300 rounded-full py-2 px-4  text-green-700 text-sm"
+          className="ml-auto bg-slate-900 hover:bg-slate-950 rounded-full py-2 px-4  text-white text-sm"
           onClick={handleAddUserClick}
         >
           {loading ? "Loading..." : "Start Chat"}
