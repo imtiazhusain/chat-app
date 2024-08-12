@@ -46,7 +46,6 @@ const Sidebar = () => {
           response?.data?.chats,
           user._id
         );
-        console.log(processedChats);
         setUserChats(processedChats);
         // setUserChats([
         //   {
@@ -439,8 +438,6 @@ const Sidebar = () => {
     setFilteredChats(filtered);
   }, [searchQuery, userChats]);
 
-  console.log(filteredChats);
-
   const searchUsers = (e) => {
     SetSearchQuery(e.target.value);
   };
@@ -456,7 +453,6 @@ const Sidebar = () => {
           },
         }
       );
-      console.log(response);
       setOpenNewChatModel(false);
       setFilteredChats((pre) => [response?.data?.chat, ...pre]);
       dispatch({ type: "SET_SELECTED_CHAT", payload: response?.data?.chat });

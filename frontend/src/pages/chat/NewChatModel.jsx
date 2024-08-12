@@ -8,12 +8,10 @@ import { Avatar } from "@mui/material";
 import Snackbar from "../../components/Snackbar";
 
 const AllUsers = ({ data, handleCreateNewChat }) => {
-  console.log(data);
   const [loading, setLoading] = useState(false);
   const handleAddUserClick = async () => {
     setLoading(true);
     const result = await handleCreateNewChat(data?._id);
-    console.log(result);
     setLoading(false);
   };
   return (
@@ -70,7 +68,6 @@ const NewChatModel = ({ setOpenNewChatModel, handleCreateNewChat }) => {
             "Content-Type": "application/json",
           },
         });
-        console.log(response);
         setUsers(response?.data?.data);
       } catch (error) {
         console.log(error);
@@ -101,7 +98,6 @@ const NewChatModel = ({ setOpenNewChatModel, handleCreateNewChat }) => {
     SetSearchQuery(e.target.value);
   };
 
-  console.log(users);
   return (
     <>
       <Dialog>
@@ -133,6 +129,7 @@ const NewChatModel = ({ setOpenNewChatModel, handleCreateNewChat }) => {
                 <AllUsers
                   data={user}
                   handleCreateNewChat={handleCreateNewChat}
+                  key={user._id}
                 />
               ))
             ) : (

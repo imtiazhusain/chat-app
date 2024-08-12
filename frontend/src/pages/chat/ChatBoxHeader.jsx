@@ -13,7 +13,6 @@ const ChatBoxHeader = ({ data, isTyping }) => {
   const isOnline = onlineUsers.includes(data.user._id);
   const { dispatch, state } = useGlobalState();
   const { isSidebarOpen } = state;
-  console.log(isSidebarOpen);
 
   const handleSidebar = () => {
     dispatch({ type: "SET_SELECTED_CHAT", payload: null });

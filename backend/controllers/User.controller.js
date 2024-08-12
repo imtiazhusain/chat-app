@@ -176,6 +176,7 @@ class User {
       // Step 3: Array.from converts the Set back to an array: [1, 2, 3, 4, 5, 6]
 
       // .toString Convert each ObjectId to a string to enable correct duplicate removal becuase if you don't do that it will consider new objectid and make them all unique so you need to convert into string
+
       const uniqueIds = Array.from(
         new Set(
           chats.flatMap((obj) => obj.participants.map((id) => id.toString()))
@@ -188,9 +189,11 @@ class User {
       //   .select("-password");
 
       // ignore multiple users by giving array of id's
+      if (uniqueIds.length == 0) uniqueIds.push(req.user._id);
       const users = await userModel
         .find({ _id: { $nin: uniqueIds } })
         .select("-password");
+      console.log(users);
 
       users.map((user) => {
         user.profile_pic = `${
@@ -198,7 +201,7 @@ class User {
         }/public/uploads/${user.profile_pic}`;
       });
 
-      res.status(200).json({
+      return res.status(200).json({
         status: "success",
         data: users,
       });
@@ -236,13 +239,11 @@ class User {
       const profile_pic = req?.file?.filename;
 
       const { name, email, user_id } = req.body;
-      console.log(req.body);
 
       if (req?.body?.profile_pic) {
         delete req.body.profile_pic;
       }
-      console.log(profile_pic);
-      console.log(req.body);
+
       // validation
       const isValidID = mongoose.Types.ObjectId.isValid(user_id);
 
@@ -274,11 +275,15 @@ class User {
       };
 
       if (!userUpdatedData?.profile_pic) {
-        console.log("profile not found");
         delete userUpdatedData.profile_pic;
       }
 
-      console.log(userUpdatedData);
+      let userPreviousData = await userModel.findById(user_id);
+
+      if (userPreviousData?.profile_pic) {
+        HelperMethods.deleteFileIfExists(userPreviousData.profile_pic);
+      }
+
       const updatedUser = await userModel.findByIdAndUpdate(
         user_id,
         userUpdatedData,

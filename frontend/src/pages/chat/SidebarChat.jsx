@@ -7,7 +7,6 @@ import OnlineDot from "../../components/onlineDot";
 import UserMenu from "./UserMenu";
 
 const Chat = ({ data, setUserChats }) => {
-  console.log(data);
   const { state, dispatch } = useGlobalState();
 
   const { selectedChat } = state;
@@ -63,6 +62,7 @@ const Chat = ({ data, setUserChats }) => {
         setOpenUserMenu={setOpenUserMenu}
         chat_id={data?.chat_id}
         setUserChats={setUserChats}
+        userData={data?.user}
       />
       {/* <hr className=" bg-slate-700 border-t border-gray-300 my-1" /> */}
     </div>

@@ -10,11 +10,17 @@ import { IoPencil } from "react-icons/io5";
 import { FaDeleteLeft, FaPencil } from "react-icons/fa6";
 import { useGlobalState } from "../../context/globalStateProvider";
 import { useNavigate } from "react-router-dom";
-import { MdAutoDelete, MdBlock } from "react-icons/md";
+import { MdAutoDelete, MdBlock, MdOutlineAccountCircle } from "react-icons/md";
 import Snackbar from "../../components/Snackbar";
 import axios from "../../config/axios";
+import UserProfile from "./UserProfile";
 
-export default function UserMenu({ setOpenUserMenu, chat_id, setUserChats }) {
+export default function UserMenu({
+  setOpenUserMenu,
+  chat_id,
+  setUserChats,
+  userData,
+}) {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -22,6 +28,7 @@ export default function UserMenu({ setOpenUserMenu, chat_id, setUserChats }) {
   const [message, setMessage] = useState("");
   const [type, setType] = useState("");
   const [loading, setLoading] = useState(false);
+  const [openProfileModel, setOpenProfileModel] = useState(false);
 
   const { state, dispatch } = useGlobalState();
   const { user } = state;
@@ -32,19 +39,14 @@ export default function UserMenu({ setOpenUserMenu, chat_id, setUserChats }) {
     setAnchorEl(null);
   };
   const handleDeleteChat = async () => {
-    // setOpenUserMenu(true);
     try {
       setLoading(true);
       const response = await axios.delete(`/chat/delete_chat/${chat_id}`);
-      // setOpenSnackbar(true);
-      // setMessage("User updated Successfully");
-      // setType("success");
 
       setUserChats((prevChats) =>
         prevChats.filter((chat) => chat.chat_id !== chat_id)
       );
     } catch (error) {
-      console.log("errr.");
       console.log(error);
       setOpenSnackbar(true);
       setMessage(
@@ -59,12 +61,9 @@ export default function UserMenu({ setOpenUserMenu, chat_id, setUserChats }) {
     setAnchorEl(null);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("userInfo");
-
-    dispatch({ type: "LOGOUT_USER" });
+  const handleViewProfile = () => {
+    setOpenProfileModel(true);
     setAnchorEl(null);
-    navigate("/login");
   };
 
   return (
@@ -89,16 +88,16 @@ export default function UserMenu({ setOpenUserMenu, chat_id, setUserChats }) {
           "aria-labelledby": "basic-button",
         }}
       >
+        <MenuItem onClick={handleViewProfile}>
+          <div className="flex gap-2 items-center justify-center">
+            <MdOutlineAccountCircle size={20} />
+            View Profile
+          </div>
+        </MenuItem>
         <MenuItem onClick={handleDeleteChat}>
           <div className="flex gap-2 items-center justify-center">
             <MdAutoDelete size={20} />
             {loading ? "Deleting Chat ..." : "Delete Chat"}
-          </div>
-        </MenuItem>
-        <MenuItem onClick={handleLogout}>
-          <div className="flex gap-2 items-center justify-center">
-            <MdBlock size={20} />
-            Block
           </div>
         </MenuItem>
       </Menu>
@@ -109,6 +108,13 @@ export default function UserMenu({ setOpenUserMenu, chat_id, setUserChats }) {
           setOpenSnackbar={setOpenSnackbar}
           message={message}
           type={type}
+        />
+      )}
+
+      {openProfileModel && (
+        <UserProfile
+          setOpenProfileModel={setOpenProfileModel}
+          userData={userData}
         />
       )}
     </div>
