@@ -37,7 +37,7 @@ export default function SettingMenu({ setOpenEditProfileModel }) {
   };
 
   return (
-    <div className="mt-2 bg-white shadow-lg w-14 rounded-e-xl  relative right-4 ">
+    <div className="mt-2 bg-slate-900 shadow-lg w-14 rounded-e-xl  relative right-4 ">
       <IconButton
         aria-label="delete"
         id="basic-button"
@@ -45,9 +45,8 @@ export default function SettingMenu({ setOpenEditProfileModel }) {
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
-        className=""
       >
-        <IoSettingsOutline />
+        <IoSettingsOutline color="white" />
       </IconButton>
       <Menu
         id="basic-menu"
