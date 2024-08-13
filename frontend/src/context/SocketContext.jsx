@@ -14,7 +14,7 @@ export const SocketContextProvider = ({ children }) => {
 
   useEffect(() => {
     if (state?.user) {
-      const socket = io("https://chat-app-qxrf.onrender.com", {
+      const socket = io(import.meta.env.VITE_SOCKET_URL, {
         query: {
           userId: state?.user?._id,
         },

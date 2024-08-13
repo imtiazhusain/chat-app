@@ -45,3 +45,15 @@ this code is for Protected routes
 
 --prefix is used for go to frontend folder and run command
 "build":"npm install && npm install --prefix frontend && npm run build --prefix frontend"
+
+we created 2 .env files in vite and vite automatically detect which file to run when you build your frontend code it will use .env.production and if not it uses .env.development
+
+also in vite .env varibles are written like this 
+VITE_API_URL=http://localhost:2100/api
+VITE_SOCKET_URL=http://localhost:2100
+ 
+
+ and accessed like this 
+ import.meta.env.VITE_SOCKET_URL
+
+ when you run build command on frontend it will add these env varibles into it         
