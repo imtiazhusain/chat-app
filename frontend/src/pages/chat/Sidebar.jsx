@@ -469,7 +469,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="bg-[#f0f0f0]  px-4 pb-2 pt-4 ">
+    <div className="bg-[#f0f0f0]  px-4 pb-2 pt-4 h-screen md:h-auto">
       {openNewChatModel && (
         <NewChatModel
           setOpenNewChatModel={setOpenNewChatModel}
@@ -490,7 +490,7 @@ const Sidebar = () => {
         />
       )}
 
-      <div className="">
+      <div className="flex  flex-col h-full">
         <div className="flex items-center justify-between  ">
           <div className="flex gap-3 items-center">
             <Avatar
@@ -532,7 +532,7 @@ const Sidebar = () => {
         <hr className="  bg-slate-700 border-t border-gray-300 my-4" />
 
         {/* show chats */}
-        <div className=" h-[900px] md:h-[370px] overflow-y-auto">
+        <div className=" flex-grow md:h-[370px] overflow-y-auto">
           {loading ? (
             "Loading Chats ..."
           ) : filteredChats.length > 0 ? (
