@@ -13,10 +13,10 @@ export const getReceiverSocketId = (receiverId) => {
 
 const io = new Server(server, {
   // we don't need cors as frontend code is also served by the same server  but if you are not using frontend build code add these line
-  // cors: {
-  //   origin: ["http://localhost:5173"],
-  //   methods: ["GET", "POST", "PUT", "DELETE"],
-  // },
+  cors: {
+    origin: ["http://localhost:5173"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+  },
 });
 io.on("connection", (socket) => {
   console.log("a user connected", socket.id);
@@ -40,8 +40,8 @@ io.on("connection", (socket) => {
   });
 
   // socket.on("typing", (room) => socket.in(room).emit("typing"));
-  socket.on("typing", (room) => socket.to(room).emit("typing"));
+  socket.on("typing", (room) => socket.to(room).emit("typing", room));
   // socket.on("stopTyping", (room) => socket.in(room).emit("stopTyping"));
-  socket.on("stopTyping", (room) => socket.to(room).emit("stopTyping"));
+  socket.on("stopTyping", (room) => socket.to(room).emit("stopTyping", room));
 });
 export { app, io, server };

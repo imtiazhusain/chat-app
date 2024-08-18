@@ -86,7 +86,6 @@ class Chat {
 
   static fetchChats = async (req, res, next) => {
     try {
-      console.log(req.user._id);
       let chats = await chatModel
         .find({
           participants: { $elemMatch: { $eq: req.user._id } },

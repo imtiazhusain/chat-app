@@ -8,6 +8,7 @@ import useListenMessages from "../../../hooks/useListenMessages";
 import ChatBoxHeader from "./ChatBoxHeader";
 import ChatBoxFooter from "./ChatBoxFooter";
 import Sidebar from "./Sidebar";
+import useListenNewChat from "../../../hooks/useListenNewChat";
 
 const Message = ({ data }) => {
   const { state, dispatch } = useGlobalState();

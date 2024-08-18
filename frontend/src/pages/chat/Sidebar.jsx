@@ -12,6 +12,7 @@ import UserProfile from "./UserProfile";
 import OnlineDot from "../../components/onlineDot";
 import SettingMenu from "./SettingMenu";
 import EditUserProfile from "./EditUserProfile";
+import useListenNewChat from "../../../hooks/useListenNewChat";
 
 const Sidebar = () => {
   const { state, dispatch } = useGlobalState();
@@ -30,6 +31,8 @@ const Sidebar = () => {
   const [type, setType] = useState("");
   const [openProfileModel, setOpenProfileModel] = useState(false);
   const [openEditProfileModel, setOpenEditProfileModel] = useState(false);
+
+  useListenNewChat({ userChats, setUserChats });
 
   useEffect(() => {
     const fetchChats = async () => {
@@ -522,7 +525,7 @@ const Sidebar = () => {
           </div>
           <input
             type="search"
-            className=" px-4 py-2 outline-none rounded-full w-full"
+            className=" px-4 py-2 outline-none rounded-full w-full bg-white"
             placeholder="Search..."
             value={searchQuery}
             onChange={searchUsers}

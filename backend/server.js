@@ -1,6 +1,6 @@
 import express from "express";
 import morgan from "morgan";
-import { PORT } from "./config/index.js";
+import { PORT, SERVER_URL } from "./config/index.js";
 import getDirname from "./utils/getDirName.js";
 import connectDB from "./database/connectDB.js";
 import errorHandler from "./middlewares/errors/errorHandler.js";
@@ -46,5 +46,5 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(rootDirectory, "frontend", "dist", "index.html"));
 });
 server.listen(PORT, () => {
-  console.log(`app is listening at http://localhost:${PORT}`);
+  console.log(`${SERVER_URL}`);
 });

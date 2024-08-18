@@ -37,6 +37,7 @@ class Message {
           $all: [receiver_id, req.user._id],
         },
       });
+
       if (!chat) {
         return res.status(404).json({
           status: "error",
@@ -56,6 +57,37 @@ class Message {
       chat.latestMessage = newMessage._id;
       chat.messages.push(newMessage._id);
       await chat.save();
+
+      let updatedChat = await chatModel
+        .findById(chat._id)
+        .populate("participants", "-password")
+        .populate({
+          path: "latestMessage",
+          populate: {
+            path: "sender",
+            model: "User",
+            select: "name email profile_pic",
+          },
+        });
+
+      // chat.participants = chat?.participants.map((user) => {
+      //   if (user?.profile_pic.startsWith("http")) return;
+      //   return (user.profile_pic = `${
+      //     process.env.SERVER_URL ? process.env.SERVER_URL : ""
+      //   }/public/uploads/${user.profile_pic}`);
+      // });
+
+      updatedChat.participants.forEach((user) => {
+        // Check if user and profile_pic exist and if profile_pic does not start with 'http'
+        if (user && user.profile_pic && !user.profile_pic.startsWith("http")) {
+          // Update profile_pic by prefixing it with the SERVER_URL and the path to uploads
+          user.profile_pic = `${process.env.SERVER_URL || ""}/public/uploads/${
+            user.profile_pic
+          }`;
+        }
+      });
+
+      console.log(updatedChat);
       if (newMessage.attachedFile) {
         newMessage.attachedFile = `${
           process.env.SERVER_URL ? process.env.SERVER_URL : ""
@@ -63,9 +95,16 @@ class Message {
       }
       // SOCKET IO FUNCTIONALITY WILL GO HERE
       const receiverSocketId = getReceiverSocketId(receiver_id);
+      console.log("recevier socket id");
+      console.log(receiverSocketId);
       if (receiverSocketId) {
         // io.to(<socket_id>).emit () used to send events to specific client
-        io.to(receiverSocketId).emit("newMessage", newMessage);
+        let newMessageObj = {
+          newMessage,
+          chat_id: updatedChat?._id,
+        };
+        io.to(receiverSocketId).emit("newMessage", newMessageObj);
+        io.to(receiverSocketId).emit("newChat", updatedChat);
       }
 
       return res

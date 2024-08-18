@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useSocketContext } from "../src/context/SocketContext";
 import notificationSound from "../src/assets/sounds/notification.mp3";
+import { useGlobalState } from "../src/context/globalStateProvider";
 const useListenMessages = ({
   messages,
   setMessages,
@@ -8,21 +9,27 @@ const useListenMessages = ({
   isTyping,
 }) => {
   const { socket } = useSocketContext();
+  const { state } = useGlobalState();
 
   useEffect(() => {
     socket?.on("newMessage", (newMessage) => {
-      const sound = new Audio(notificationSound);
-      sound.play();
-      setMessages([...messages, newMessage]);
+      if (state?.selectedChat?.chat_id == newMessage.chat_id) {
+        const sound = new Audio(notificationSound);
+
+        sound.play().catch((err) => console.error("Error playing sound:", err));
+        setMessages([...messages, newMessage.newMessage]);
+      }
     });
 
-    socket?.on("typing", () => {
-      setIsTyping(true);
-      console.log("typing event received.....");
+    socket?.on("typing", (chat_id) => {
+      if (state?.selectedChat?.chat_id == chat_id) {
+        setIsTyping(true);
+      }
     });
-    socket?.on("stopTyping", () => {
-      setIsTyping(false);
-      console.log("stop typing event received.....");
+    socket?.on("stopTyping", (chat_id) => {
+      if (state?.selectedChat?.chat_id == chat_id) {
+        setIsTyping(false);
+      }
     });
     // cleanup function when component unmount we don't want to listen and this line is very important
     return () => {
