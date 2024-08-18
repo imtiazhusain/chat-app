@@ -1,12 +1,9 @@
 import * as React from "react";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import { IoSettings } from "react-icons/io5";
 import { IconButton } from "@mui/material";
-import { IoIosSettings } from "react-icons/io";
 import { IoSettingsOutline } from "react-icons/io5";
 import { IoMdLogOut } from "react-icons/io";
-import { IoPencil } from "react-icons/io5";
 import { FaPencil } from "react-icons/fa6";
 import { useGlobalState } from "../../context/globalStateProvider";
 import { useNavigate } from "react-router-dom";
@@ -15,8 +12,7 @@ export default function SettingMenu({ setOpenEditProfileModel }) {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-  const { state, dispatch } = useGlobalState();
-  const { user } = state;
+  const { dispatch } = useGlobalState();
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };

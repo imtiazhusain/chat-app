@@ -4,7 +4,6 @@ import Signup from "./pages/signup/Signup.page";
 import Chat from "./pages/chat/Chat.page";
 import { useGlobalState } from "./context/globalStateProvider";
 import VerifyUser from "./pages/verify_user/VerifyUser.page";
-import ProtectedRoutes from "./auth/ProtectedRoutes";
 
 function App() {
   const { state } = useGlobalState();

@@ -1,15 +1,9 @@
 import { useState } from "react";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import { IoSettings } from "react-icons/io5";
 import { IconButton } from "@mui/material";
-import { IoIosSettings, IoMdMore } from "react-icons/io";
-import { IoSettingsOutline } from "react-icons/io5";
-import { IoMdLogOut } from "react-icons/io";
-import { IoPencil } from "react-icons/io5";
-import { FaDeleteLeft, FaPencil } from "react-icons/fa6";
+import { IoMdMore } from "react-icons/io";
 import { useGlobalState } from "../../context/globalStateProvider";
-import { useNavigate } from "react-router-dom";
 import { MdAutoDelete, MdBlock, MdOutlineAccountCircle } from "react-icons/md";
 import Snackbar from "../../components/Snackbar";
 import axios from "../../config/axios";
@@ -21,7 +15,6 @@ export default function UserMenu({
   setUserChats,
   userData,
 }) {
-  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const [openSnackbar, setOpenSnackbar] = useState(false);

@@ -17,7 +17,6 @@ const Signup = () => {
     const name = event.target.name;
     if (name == "profile_pic") {
       setInputs((values) => ({ ...values, [name]: event.target.files[0] }));
-      // setprofile_pics(event.target.files[0])
     } else {
       const value = event.target.value;
       setInputs((values) => ({ ...values, [name]: value }));
@@ -106,11 +105,6 @@ const Signup = () => {
           tempUser: response.data.user,
         },
       });
-      // navigate("/login", {
-      //   state: {
-      //     signupSuccess: true,
-      //   },
-      // });
     } catch (error) {
       setOpenSnackbar(true);
       setMessage(
@@ -212,7 +206,6 @@ const Signup = () => {
                 type="file"
                 name="profile_pic"
                 onChange={handleChange}
-                // className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg outline-none w-full p-2.5"
                 className="  text-sm text-slate-500
       file:mr-4 file:py-2 file:px-4
       file:rounded-full file:border-0

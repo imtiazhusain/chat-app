@@ -2,7 +2,6 @@ import { useRef, useState } from "react";
 import { useSocketContext } from "../../context/SocketContext";
 import { useGlobalState } from "../../context/globalStateProvider";
 import { RiSendPlaneFill } from "react-icons/ri";
-import { IoMdAttach } from "react-icons/io";
 import { IoDocumentAttach } from "react-icons/io5";
 import axios from "../../config/axios";
 import Spinner from "../../components/Spinner";

@@ -3,16 +3,14 @@ import OnlineDot from "../../components/onlineDot";
 import { Avatar, IconButton } from "@mui/material";
 import UserProfile from "./UserProfile";
 import { useSocketContext } from "../../context/SocketContext";
-import { IoMenu } from "react-icons/io5";
 import { useGlobalState } from "../../context/globalStateProvider";
-import { IoMdArrowBack, IoMdArrowRoundBack } from "react-icons/io";
+import { IoMdArrowRoundBack } from "react-icons/io";
 
 const ChatBoxHeader = ({ data, isTyping }) => {
   const [openProfileModel, setOpenProfileModel] = useState(false);
   const { onlineUsers } = useSocketContext();
   const isOnline = onlineUsers.includes(data.user._id);
-  const { dispatch, state } = useGlobalState();
-  const { isSidebarOpen } = state;
+  const { dispatch } = useGlobalState();
 
   const handleSidebar = () => {
     dispatch({ type: "SET_SELECTED_CHAT", payload: null });

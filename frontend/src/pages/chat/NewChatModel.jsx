@@ -5,7 +5,6 @@ import { IoCloseOutline } from "react-icons/io5";
 import axios from "../../config/axios";
 import { useGlobalState } from "../../context/globalStateProvider";
 import { Avatar } from "@mui/material";
-import Snackbar from "../../components/Snackbar";
 
 const AllUsers = ({ data, handleCreateNewChat }) => {
   const [loading, setLoading] = useState(false);
@@ -27,10 +26,6 @@ const AllUsers = ({ data, handleCreateNewChat }) => {
               {data.name}
             </h3>
             <h3 className="text-gray-500 text-xs">
-              {/* {data?.email.length >= 12
-                ? data?.email.slice(0, 12) + "..."
-                : data?.email} */}
-
               {data?.email.length >= 12
                 ? data?.email.slice(0, 5) + "..." + data?.email.slice(-7)
                 : data?.email}

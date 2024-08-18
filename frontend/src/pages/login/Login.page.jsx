@@ -5,7 +5,7 @@ import Snackbar from "../../components/Snackbar";
 import axios from "../../config/axios";
 import { useGlobalState } from "../../context/globalStateProvider";
 const Login = () => {
-  const { state, dispatch } = useGlobalState();
+  const { dispatch } = useGlobalState();
 
   const [inputs, setInputs] = useState({});
   const [loading, setLoading] = useState(false);
