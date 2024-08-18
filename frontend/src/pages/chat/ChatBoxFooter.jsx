@@ -145,12 +145,13 @@ const ChatBoxFooter = ({ setMessages }) => {
         onChange={handleChange}
         autoFocus
       />
-      <div
-        className=" text-slate-900 cursor-pointer"
+      <button
+        className=" text-slate-900 cursor-pointer disabled:cursor-not-allowed"
         onClick={handleSendMessage}
+        disabled={loading}
       >
         {loading ? <Spinner /> : <RiSendPlaneFill size={25} />}
-      </div>
+      </button>
 
       {openSnackbar && (
         <Snackbar

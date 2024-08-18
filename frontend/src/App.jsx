@@ -27,10 +27,7 @@ function App() {
           path="signup"
           element={!user ? <Signup /> : <Navigate to="/chat-page" />}
         />
-        <Route
-          path="verify-user"
-          element={!user ? <Navigate to="/login" /> : <VerifyUser />}
-        />
+        <Route path="verify-user" element={<VerifyUser />} />
 
         <Route
           path="chat-page"

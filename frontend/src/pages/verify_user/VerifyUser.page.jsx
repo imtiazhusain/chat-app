@@ -121,14 +121,18 @@ const VerifyUser = () => {
             onChange={handleChange}
             className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg  w-full p-2.5 outline-none placeholder:italic"
           />
-          <button className="w-full bg-slate-900  py-2.5 text-white tracking-wider hover:bg-slate-950 transition-colors duration-300 font-semibold rounded-lg mt-3">
+          <button
+            className="w-full bg-slate-900  py-2.5 text-white tracking-wider hover:bg-slate-950 transition-colors duration-300 font-semibold rounded-lg mt-3 disabled:cursor-not-allowed"
+            disabled={loading}
+          >
             {loading ? "Loading..." : "Verify"}
           </button>
         </form>
 
         <button
-          className="w-full bg-slate-900  py-2.5 text-white tracking-wider hover:bg-slate-950 transition-colors duration-300 font-semibold rounded-lg mt-3"
+          className="w-full bg-slate-900  py-2.5 text-white tracking-wider hover:bg-slate-950 transition-colors duration-300 font-semibold rounded-lg mt-3 disabled:cursor-not-allowed"
           onClick={resendCode}
+          disabled={resendCodeLoading}
         >
           {resendCodeLoading ? "Loading..." : "Resend Code"}
         </button>

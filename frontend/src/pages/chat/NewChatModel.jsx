@@ -39,8 +39,9 @@ const AllUsers = ({ data, handleCreateNewChat }) => {
         </div>
 
         <button
-          className="ml-auto bg-slate-900 hover:bg-slate-950 rounded-full py-2 px-4  text-white text-sm"
+          className="ml-auto bg-slate-900 hover:bg-slate-950 rounded-full py-2 px-4  text-white text-sm  disabled:cursor-not-allowed"
           onClick={handleAddUserClick}
+          disabled={loading}
         >
           {loading ? "Loading..." : "Start Chat"}
         </button>

@@ -94,7 +94,7 @@ export default function UserMenu({
             View Profile
           </div>
         </MenuItem>
-        <MenuItem onClick={handleDeleteChat}>
+        <MenuItem onClick={handleDeleteChat} disabled={loading}>
           <div className="flex gap-2 items-center justify-center">
             <MdAutoDelete size={20} />
             {loading ? "Deleting Chat ..." : "Delete Chat"}

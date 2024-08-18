@@ -149,8 +149,9 @@ const EditUserProfile = ({ setOpenEditProfileModel, userData }) => {
               />
 
               <button
-                className="w-full bg-slate-900  py-2.5 text-white tracking-wider hover:bg-slate-950 transition-colors duration-300  rounded-lg mt-2"
+                className="w-full bg-slate-900  py-2.5 text-white tracking-wider hover:bg-slate-950 transition-colors duration-300  rounded-lg mt-2 disabled:cursor-not-allowed"
                 onClick={EditProfile}
+                disabled={loading}
               >
                 {loading ? "Loading..." : " Edit Profile"}
               </button>

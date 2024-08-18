@@ -229,7 +229,10 @@ const Signup = () => {
           </div>
 
           <div>
-            <button className="w-full bg-slate-900  py-2.5 text-white tracking-wider hover:bg-slate-950 transition-colors duration-300 font-semibold rounded-lg mt-3">
+            <button
+              className="w-full bg-slate-900  py-2.5 text-white tracking-wider hover:bg-slate-950 transition-colors duration-300 font-semibold rounded-lg mt-3 disabled:cursor-not-allowed"
+              disabled={loading}
+            >
               {loading ? "Loading..." : "Create Account"}
             </button>
           </div>

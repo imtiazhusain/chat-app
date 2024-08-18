@@ -139,7 +139,10 @@ const Login = () => {
                 </span>
               )}
             </div>
-            <button className="w-full bg-slate-900  py-2.5 text-white tracking-wider hover:bg-slate-950 transition-colors duration-300 font-semibold rounded-lg mt-2">
+            <button
+              className="w-full bg-slate-900  py-2.5 text-white tracking-wider hover:bg-slate-950 transition-colors duration-300 font-semibold rounded-lg mt-2 disabled:cursor-not-allowed"
+              disabled={loading}
+            >
               {loading ? "Loading..." : "Login"}
             </button>
             <div>
