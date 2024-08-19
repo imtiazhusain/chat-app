@@ -104,7 +104,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="bg-[#f0f0f0]  px-4 pb-2 pt-4 h-screen md:h-auto">
+    <div className="bg-[#f0f0f0]  px-4 pb-2 pt-4 h-dvh md:h-auto">
       {openNewChatModel && (
         <NewChatModel
           setOpenNewChatModel={setOpenNewChatModel}
