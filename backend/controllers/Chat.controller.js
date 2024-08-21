@@ -25,14 +25,11 @@ class Chat {
     }
 
     try {
-      let chat = await chatModel.find({
-        $and: [
-          { participants: { $elemMatch: { $eq: req.user._id } } },
-          { participants: { $elemMatch: { $eq: receiver_id } } },
-        ],
+      const chatExists = await chatModel.exists({
+        participants: { $all: [req.user._id, receiver_id] },
       });
 
-      if (chat.length > 0) {
+      if (chatExists) {
         return res.status(403).json({
           status: "error",
           message: "Chat Already exists",
@@ -52,7 +49,7 @@ class Chat {
             match: { _id: { $ne: req.user._id } }, // Exclude specific participants
             select: "-password", // Exclude password field
           })
-          .populate("messages")
+          // .populate("messages")
           .populate({
             path: "latestMessage",
             populate: {
@@ -62,11 +59,14 @@ class Chat {
             },
           });
 
-        selectedChat?.participants.map((user) => {
-          user.profile_pic = `${
-            process.env.SERVER_URL ? process.env.SERVER_URL : ""
-          }/public/uploads/${user.profile_pic}`;
-        });
+        if (selectedChat) {
+          // Adjust profile pictures here
+          selectedChat?.participants.forEach((user) => {
+            user.profile_pic = `${
+              process.env.SERVER_URL ? process.env.SERVER_URL : ""
+            }/public/uploads/${user.profile_pic}`;
+          });
+        }
 
         let processedChat = {
           latestMessage: selectedChat.latestMessage,

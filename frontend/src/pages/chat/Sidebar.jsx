@@ -55,7 +55,10 @@ const Sidebar = () => {
       }
     };
 
-    fetchChats();
+    if (user?.access_token) {
+      console.log("=================------------");
+      fetchChats();
+    }
   }, [user?.access_token]);
 
   useEffect(() => {
@@ -104,7 +107,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="bg-[#f0f0f0]  px-4 pb-2 pt-4 h-dvh md:h-auto">
+    <div className="bg-[#f0f0f0]  px-4 pb-2 pt-4 h-svh md:h-auto">
       {openNewChatModel && (
         <NewChatModel
           setOpenNewChatModel={setOpenNewChatModel}

@@ -19,7 +19,6 @@ const VerifyUser = () => {
   useEffect(() => {
     if (location.state) {
       const { tempUser } = location.state;
-      console.log(tempUser);
       setUser(tempUser);
     }
   }, []);
@@ -99,7 +98,7 @@ const VerifyUser = () => {
 
   return (
     <div className=" grid place-items-center h-screen">
-      <div className="bg-white w-[512px]  p-4 rounded-md mt-3 ">
+      <div className="bg-white w-72 md:w-[512px]  p-4 rounded-md mt-3 ">
         <h1 className="text-center font-medium text-lg mb-3">
           User Verification
         </h1>

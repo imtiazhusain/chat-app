@@ -103,7 +103,7 @@ const Login = () => {
 
   return (
     <div className=" grid place-items-center h-screen">
-      <div className="bg-white w-72 md:w-80  p-4 rounded-md ">
+      <div className="bg-white w-[80%] md:w-80  p-4 rounded-md ">
         <h1 className=" text-center font-bold text-xl  md:text-2xl tracking-wide">
           Welcome Back!
         </h1>
