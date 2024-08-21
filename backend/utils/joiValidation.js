@@ -28,25 +28,6 @@ class JoiValidation {
     return schema.validate(body);
   }
 
-  // static createMovieRatingValidation(body) {
-  //   const schema = Joi.object({
-  //     name: Joi.string().required().label("Movie Name"),
-  //     rating: Joi.number().required().label("Movie Rating"),
-  //     description: Joi.string().required().label("Movie Description"),
-  //     poster: Joi.string().required().label("Movie Poster"),
-  //   });
-  //   return schema.validate(body);
-  // }
-
-  // static updateMovieRatingValidation(body) {
-  //   const schema = Joi.object({
-  //     name: Joi.string().required().label("Movie Name"),
-  //     rating: Joi.number().required().label("Movie Rating"),
-  //     description: Joi.string().required().label("Movie Description"),
-  //   });
-  //   return schema.validate(body);
-  // }
-
   static registerUserValidation(body) {
     const schema = Joi.object({
       name: Joi.string().min(2).max(30).required().label("Name"),

@@ -9,7 +9,7 @@ function App() {
   const { state } = useGlobalState();
   const { user } = state;
   return (
-    <div className="font-popins  h-screen w-full bg-image">
+    <div className="font-popins  md:h-screen w-full bg-image">
       <Routes>
         {/* Routes visible only to unauthorized users */}
         <Route
