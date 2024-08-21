@@ -15,9 +15,9 @@ const useListenNewChat = ({ userChats, setUserChats }) => {
       const chatIds = userChats.map((chat) => chat.chat_id);
       // Check if the idToCompare is included in the chatIds array
       if (chatIds.includes(newChat._id)) {
-        const sound = new Audio(notificationSound);
+        // const sound = new Audio(notificationSound);
 
-        sound.play().catch((err) => console.error("Error playing sound:", err));
+        // sound.play().catch((err) => console.error("Error playing sound:", err));
 
         setUserChats((currentChats) => {
           let updatedChats = [];
@@ -55,8 +55,8 @@ const useListenNewChat = ({ userChats, setUserChats }) => {
         });
 
         setUserChats((pre) => [processedChat, ...pre]);
-        const sound = new Audio(notificationSound);
-        sound.play().catch((err) => console.error("Error playing sound:", err));
+        // const sound = new Audio(notificationSound);
+        // sound.play().catch((err) => console.error("Error playing sound:", err));
       }
     });
 
