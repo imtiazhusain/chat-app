@@ -41,8 +41,6 @@ app.use(errorHandler);
 
 // this line is for deployment
 app.get("*", (req, res) => {
-  console.log("path...");
-  console.log(path.join(rootDirectory, "frontend", "dist", "index.html"));
   res.sendFile(path.join(rootDirectory, "frontend", "dist", "index.html"));
 });
 server.listen(PORT, () => {

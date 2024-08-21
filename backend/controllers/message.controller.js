@@ -87,7 +87,6 @@ class Message {
         }
       });
 
-      console.log(updatedChat);
       if (newMessage.attachedFile) {
         newMessage.attachedFile = `${
           process.env.SERVER_URL ? process.env.SERVER_URL : ""
@@ -95,8 +94,6 @@ class Message {
       }
       // SOCKET IO FUNCTIONALITY WILL GO HERE
       const receiverSocketId = getReceiverSocketId(receiver_id);
-      console.log("recevier socket id");
-      console.log(receiverSocketId);
       if (receiverSocketId) {
         // io.to(<socket_id>).emit () used to send events to specific client
         let newMessageObj = {

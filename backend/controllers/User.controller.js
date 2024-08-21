@@ -193,7 +193,6 @@ class User {
       const users = await userModel
         .find({ _id: { $nin: uniqueIds } })
         .select("-password");
-      console.log(users);
 
       users.map((user) => {
         user.profile_pic = `${
@@ -227,7 +226,7 @@ class User {
       // });
       // console.log(isdeleted);
     } catch (error) {
-      return next(new Error("somthing went wrong in database"));
+      return next(new Error("something went wrong in database"));
     }
     res.status(200).json({ status: "success", message: "successfully logout" });
   };
@@ -315,7 +314,6 @@ class User {
     try {
       const userID = req.body.userId;
       const OTP = req.body.OTP;
-      console.log(userID);
       // validation
 
       const { error } = joiValidation.verifyEmailValidation(req.body);
@@ -326,7 +324,6 @@ class User {
       }
 
       const isValidID = mongoose.Types.ObjectId.isValid(userID);
-      console.log(isValidID);
       if (!isValidID) {
         let error = {
           message: "Invalid user ID",
@@ -339,8 +336,6 @@ class User {
         return next(CustomErrorHandler.NotFound("User not Found"));
       }
 
-      console.log(user);
-
       if (user.is_verified) {
         return res.status(403).json({
           status: "error",
@@ -349,16 +344,12 @@ class User {
       }
 
       const token = await VerificationTokenModel.findOne({ owner: user._id });
-      console.log(token);
 
       if (!token) {
-        console.log("no token found");
         return next(CustomErrorHandler.NotFound("No token found"));
       }
 
       const isMatched = await token.compareToken(OTP);
-
-      console.log(isMatched);
 
       if (!isMatched) {
         return res.status(422).json({
@@ -390,8 +381,6 @@ class User {
 
   static sendOTP = async (req, res, next) => {
     try {
-      console.log("in send otp");
-      console.log(req.query);
       const userEmail = req.body.userEmail;
       const userId = req.body.userId;
 
@@ -419,7 +408,6 @@ class User {
 
       const user = await userModel.findOne({ email: userEmail });
       if (!user) {
-        console.log("no user found");
         return next(CustomErrorHandler.NotFound("No user found"));
       }
 
@@ -437,8 +425,6 @@ class User {
         const result = await VerificationTokenModel.deleteOne({
           owner: userId,
         });
-        console.log("Account exits deleted");
-        console.log(result);
       }
 
       const hashedOTP = await bcrypt.hash(OTP, 10);

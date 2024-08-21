@@ -21,8 +21,6 @@ tokenSchema.pre("save", async function (next) {
 });
 
 tokenSchema.methods.compareToken = async function (token) {
-  console.log(token);
-  console.log(this.OTP);
   const result = await bcrypt.compare(token, this.OTP);
   return result;
 };
