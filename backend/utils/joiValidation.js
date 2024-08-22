@@ -59,6 +59,22 @@ class JoiValidation {
       name: Joi.string().min(2).max(30).required().label("Name"),
       email: Joi.string().email().required().label("Email"),
       user_id: Joi.string().required().label("User ID"),
+      password: Joi.string()
+        .optional() // Makes the field optional
+        .allow("") // Explicitly allow an empty string
+        .pattern(
+          new RegExp(
+            "^(?=.*[a-z])(?=.*[A-Z])(?=.*[~`!@#$%^&*()_+\\-=\\[\\]{};:'\"\\\\|,.<>\\/?]).{8,30}$"
+          )
+        )
+        .messages({
+          "string.pattern.base":
+            "Password must have 8-30 chars, 1 uppercase, 1 lowercase, and 1 special character",
+          "string.empty": "Please provide password",
+          "string.length": "Password must be between 8 and 30 characters long",
+          "any.required": "Password field is required",
+        })
+        .label("Password"),
     });
 
     return schema.validate(body);

@@ -36,6 +36,7 @@ const EditUserProfile = ({ setOpenEditProfileModel, userData }) => {
       name: userData?.name,
       email: userData?.email,
       profile_pic: userData?.profile_pic,
+      password: "",
       user_id: userData?._id,
     });
   }, [userData]);
@@ -56,6 +57,9 @@ const EditUserProfile = ({ setOpenEditProfileModel, userData }) => {
     formData.append("email", userInputs?.email);
     formData.append("profile_pic", userInputs?.profile_pic);
     formData.append("user_id", userInputs?.user_id);
+    if (userInputs?.password) {
+      formData.append("password", userInputs?.password);
+    }
     try {
       const response = await axios.put("/user/edit_user", formData);
       setOpenSnackbar(true);
@@ -89,7 +93,7 @@ const EditUserProfile = ({ setOpenEditProfileModel, userData }) => {
   return (
     <div>
       <Dialog>
-        <div className="bg-white w-80  h-96 p-2 rounded-md ">
+        <div className="bg-white w-80  h-auto p-2 rounded-md ">
           <div className="grid place-content-end">
             <IoCloseOutline
               onClick={() => setOpenEditProfileModel(false)}
@@ -132,7 +136,7 @@ const EditUserProfile = ({ setOpenEditProfileModel, userData }) => {
             <div className="mt-3 gap-2 flex flex-col">
               <input
                 type="text"
-                placeholder="name@company.com"
+                placeholder="Your Name"
                 value={userInputs.name || ""}
                 onChange={handleChange}
                 name="name"
@@ -140,11 +144,20 @@ const EditUserProfile = ({ setOpenEditProfileModel, userData }) => {
               />
 
               <input
-                type="text"
+                type="email"
                 placeholder="name@company.com"
                 value={userInputs.email || ""}
                 onChange={handleChange}
                 name="email"
+                className="bg-gray-50 border border-gray-300 text-gray-900  rounded-lg  w-full p-2 outline-none"
+              />
+
+              <input
+                type="text"
+                placeholder="••••••••"
+                value={userInputs.password || ""}
+                onChange={handleChange}
+                name="password"
                 className="bg-gray-50 border border-gray-300 text-gray-900  rounded-lg  w-full p-2 outline-none"
               />
 

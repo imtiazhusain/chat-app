@@ -237,7 +237,7 @@ class User {
       // req.body.profile_pic = req?.file?.filename;
       const profile_pic = req?.file?.filename;
 
-      const { name, email, user_id } = req.body;
+      const { name, email, user_id, password } = req.body;
 
       if (req?.body?.profile_pic) {
         delete req.body.profile_pic;
@@ -267,10 +267,16 @@ class User {
         );
       }
 
+      let hashedPassword;
+      if (password) {
+        hashedPassword = await bcrypt.hash(password, 10);
+      }
+
       let userUpdatedData = {
         name: name,
         email: email,
         profile_pic: profile_pic ? profile_pic : null,
+        ...(hashedPassword && { password: hashedPassword }),
       };
 
       if (!userUpdatedData?.profile_pic) {

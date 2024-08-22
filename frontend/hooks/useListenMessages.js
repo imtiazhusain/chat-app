@@ -14,10 +14,10 @@ const useListenMessages = ({
   useEffect(() => {
     socket?.on("newMessage", (newMessage) => {
       if (state?.selectedChat?.chat_id == newMessage.chat_id) {
-        // const sound = new Audio(notificationSound);
-
-        // sound.play().catch((err) => console.error("Error playing sound:", err));
         setMessages([...messages, newMessage.newMessage]);
+        const sound = new Audio(notificationSound);
+
+        sound.play().catch((err) => console.error("Error playing sound:", err));
       }
     });
 

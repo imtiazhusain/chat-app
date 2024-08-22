@@ -18,9 +18,6 @@ const useListenNewChat = ({ userChats, setUserChats }) => {
       console.log(chatIds);
       if (chatIds.includes(newChat._id)) {
         console.log("chat exists now message is going to add");
-        // const sound = new Audio(notificationSound);
-
-        // sound.play().catch((err) => console.error("Error playing sound:", err));
 
         setUserChats((currentChats) => {
           let updatedChats = [];
@@ -46,6 +43,9 @@ const useListenNewChat = ({ userChats, setUserChats }) => {
           console.log(updatedChats);
           return updatedChats; // Return the newly arranged array
         });
+        const sound = new Audio(notificationSound);
+
+        sound.play().catch((err) => console.error("Error playing sound:", err));
       } else {
         let processedChat = {
           latestMessage: newChat.latestMessage,
@@ -60,8 +60,8 @@ const useListenNewChat = ({ userChats, setUserChats }) => {
         });
 
         setUserChats((pre) => [processedChat, ...pre]);
-        // const sound = new Audio(notificationSound);
-        // sound.play().catch((err) => console.error("Error playing sound:", err));
+        const sound = new Audio(notificationSound);
+        sound.play().catch((err) => console.error("Error playing sound:", err));
       }
     });
 
