@@ -136,7 +136,7 @@ const ChatBox = () => {
     }
   }, [state.selectedChat]);
 
-  return state.selectedChat ? (
+  return (
     <div className="h-full px-4 py-2 md:p-0 flex flex-col">
       <ChatBoxHeader data={state.selectedChat} isTyping={isTyping} />
 
@@ -155,18 +155,6 @@ const ChatBox = () => {
             </div>
           </>
         )}
-      </div>
-    </div>
-  ) : (
-    <div className="h-full  ">
-      <div className="hidden md:grid md:place-content-center h-full">
-        <div className="flex items-center justify-center flex-col  gap-2">
-          <h2 className="text-3xl tracking-widest">Welcome 👋 {user.name}</h2>
-          <h3 className="text-lg"> Select any chat to start conversation</h3>
-        </div>
-      </div>
-      <div className="md:hidden  ">
-        <Sidebar />
       </div>
     </div>
   );

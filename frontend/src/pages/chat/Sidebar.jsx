@@ -31,7 +31,7 @@ const Sidebar = () => {
   const [openEditProfileModel, setOpenEditProfileModel] = useState(false);
 
   useListenNewChat({ userChats, setUserChats });
-  console.log("user chats");
+  console.log("user chats ");
   console.log(userChats);
   console.log(filteredChats);
 
@@ -54,12 +54,13 @@ const Sidebar = () => {
       } catch (error) {
         console.log(error);
       } finally {
-        setLoading(false);
+        setTimeout(() => {
+          setLoading(false);
+        }, 100);
       }
     };
 
     if (user?.access_token) {
-      console.log("=================------------");
       fetchChats();
     }
   }, [user?.access_token]);
