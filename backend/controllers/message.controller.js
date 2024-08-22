@@ -100,6 +100,7 @@ class Message {
           newMessage,
           chat_id: updatedChat?._id,
         };
+        console.log("sending chat and messages....");
         io.to(receiverSocketId).emit("newMessage", newMessageObj);
         io.to(receiverSocketId).emit("newChat", updatedChat);
       }

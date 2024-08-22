@@ -31,6 +31,9 @@ const Sidebar = () => {
   const [openEditProfileModel, setOpenEditProfileModel] = useState(false);
 
   useListenNewChat({ userChats, setUserChats });
+  console.log("user chats");
+  console.log(userChats);
+  console.log(filteredChats);
 
   useEffect(() => {
     const fetchChats = async () => {
@@ -62,6 +65,7 @@ const Sidebar = () => {
   }, [user?.access_token]);
 
   useEffect(() => {
+    console.log("filtered chat useeffect run...");
     const lowercasedQuery = searchQuery.toLowerCase();
     const queryWords = lowercasedQuery.split(" ").filter((word) => word);
 

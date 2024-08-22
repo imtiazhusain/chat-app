@@ -11,10 +11,13 @@ const useListenNewChat = ({ userChats, setUserChats }) => {
   useEffect(() => {
     socket?.on("newChat", (newChat) => {
       console.log("new chat");
+      console.log(newChat);
       // Extract chat_ids into an array
       const chatIds = userChats.map((chat) => chat.chat_id);
       // Check if the idToCompare is included in the chatIds array
+      console.log(chatIds);
       if (chatIds.includes(newChat._id)) {
+        console.log("chat exists now message is going to add");
         // const sound = new Audio(notificationSound);
 
         // sound.play().catch((err) => console.error("Error playing sound:", err));
@@ -39,6 +42,8 @@ const useListenNewChat = ({ userChats, setUserChats }) => {
             updatedChats.unshift(matchedChat); // Place the updated chat at the beginning
           }
 
+          console.log("updated chat.....");
+          console.log(updatedChats);
           return updatedChats; // Return the newly arranged array
         });
       } else {
