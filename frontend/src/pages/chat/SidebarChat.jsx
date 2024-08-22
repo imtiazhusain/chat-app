@@ -35,7 +35,7 @@ const Chat = ({ data, setUserChats }) => {
             <Avatar alt="user image" src={data?.user?.profile_pic} />
           </OnlineDot>
         ) : (
-          <Avatar alt="user image" src={data?.user?.profile_pic} />
+          <Avatar alt={data?.user?.name} src={data?.user?.profile_pic} />
         )}
 
         <div className="flex flex-col gap-0  w-full">

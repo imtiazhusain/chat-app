@@ -137,8 +137,8 @@ const Sidebar = () => {
         <div className="flex items-center justify-between  ">
           <div className="flex gap-3 items-center">
             <Avatar
-              alt={user.name}
-              src={user.profile_pic}
+              alt={user?.name}
+              src={user?.profile_pic}
               onClick={() => setOpenProfileModel(true)}
               className="cursor-pointer"
             />

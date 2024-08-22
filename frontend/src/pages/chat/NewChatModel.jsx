@@ -19,7 +19,7 @@ const AllUsers = ({ data, handleCreateNewChat }) => {
         className={`flex gap-3 items-center justify-between my-4  px-2 py-1 
            rounded-md `}
       >
-        <Avatar alt="user image" src={data?.profile_pic} />
+        <Avatar alt={data?.name} src={data?.profile_pic} />
         <div className="flex flex-col gap-0  ">
           <div className="flex flex-col justify-start  ">
             <h3 className="text-slate-800 font-medium tracking-wide">

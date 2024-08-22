@@ -28,8 +28,8 @@ const UserProfile = ({ setOpenProfileModel, userData }) => {
                 variant="dot"
               >
                 <Avatar
-                  alt={userData.name}
-                  src={userData.profile_pic}
+                  alt={userData?.name}
+                  src={userData?.profile_pic}
                   sx={{ width: 156, height: 156 }}
                   className="shadow-lg"
                 />
